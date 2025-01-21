@@ -1,9 +1,9 @@
 import { View, Text, StyleSheet } from "react-native";
 
-export default function HomeScreen() {
+export default function AboutScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>¡Bienvenido a Xyro! 🚀</Text>
+      <Text style={styles.text}>Esta es la pantalla de Acerca de 📜</Text>
     </View>
   );
 }
