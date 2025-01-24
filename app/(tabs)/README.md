@@ -1,1 +1,1 @@
-#funcionamiento#
+#funcionamiento#dada
