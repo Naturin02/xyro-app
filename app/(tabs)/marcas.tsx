@@ -66,11 +66,11 @@ const MarcasScreen = () => {
         <Pressable style={styles.footerItem} onPress={() => router.push("/marcas")}>
           <Text style={styles.footerText}>🏷️ Marcas</Text>
         </Pressable>
-        <Pressable style={styles.footerItem} onPress={() => alert("Categorías")}>
+        <Pressable style={styles.footerItem} onPress={() => alert("/categorías")}>
           <Text style={styles.footerText}>📂 Categorías</Text>
         </Pressable>
-        <Pressable style={styles.footerItem} onPress={() => alert("Cuenta")}>
-          <Text style={styles.footerText}>👤 Cuenta</Text>
+        <Pressable style={styles.footerItem} onPress={() => router.push("/(tabs)/cuenta")}>
+        <Text style={styles.footerText}>👤 Cuenta</Text>
         </Pressable>
       </View>
     </View>

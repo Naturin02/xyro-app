@@ -45,7 +45,7 @@ const LoginScreen = () => {
       </Pressable>
 
       {/* Registro y alternativas */}
-      <Pressable onPress={() => console.log("Registro")} style={styles.register}>
+      <Pressable onPress={() => router.replace("/registro")} style={styles.register}>
         <Text style={styles.registerText}>Regístrate gratis</Text>
       </Pressable>
 

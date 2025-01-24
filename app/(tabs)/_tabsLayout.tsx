@@ -1,20 +1,12 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { FontAwesome } from "@expo/vector-icons";
-import { Tabs } from "expo-router";
+import { Stack } from "expo-router";
 
-const Tab = createBottomTabNavigator();
-
-export default function TabLayout() {
+export default function Layout() {
   return (
-    <Tabs
-      screenOptions={({ route }) => ({
-        headerShown: false,
-        tabBarStyle:
-          route.name === "marcas"
-            ? { display: "flex" } // Mostrar en "marcas"
-            : { display: "none" }, // Ocultar en otras pantallas
-      })}
-    />
+    <Stack>
+      <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="login" options={{ title: "Inicio de sesión" }} />
+      <Stack.Screen name="registro" options={{ title: "Registro" }} /> {/* Asegúrate de que está aquí */}
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+    </Stack>
   );
 }
-
