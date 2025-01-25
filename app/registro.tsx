@@ -64,7 +64,7 @@ const RegistroScreen = () => {
       <Pressable
         style={[styles.registerButton, !termsAccepted && styles.disabledButton]}
         disabled={!termsAccepted}
-        onPress={() => router.push("/(tabs)/marcas")}
+        onPress={() => router.push("/verificacion")}
       >
         <Text style={styles.registerButtonText}>Crear cuenta</Text>
       </Pressable>

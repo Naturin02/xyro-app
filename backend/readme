@@ -1,0 +1,13 @@
+ejecutar para que funcione:
+1. cd backend
+2. npm init -y
+
+3. npm install express cors dotenv mysql2 bcryptjs jsonwebtoken nodemon
+cuando ya este instalado en su laptop puede ejecutar:
+npm start → Inicia el servidor de forma normal.
+npm run dev → Inicia con nodemon (reinicia automáticamente cuando hay cambios).
+
+modificar server.js dependiendo del puerto (localhost:3000)
+
+para que funcione con movil:
+npm install express cors dotenv

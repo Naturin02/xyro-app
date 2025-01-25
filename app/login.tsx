@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Image, StyleSheet, View, Pressable, Text, TextInput } from "react-native";
 import { useRouter } from "expo-router"; // Navegación con Expo Router
 import { Color, FontFamily, FontSize, Border } from "../constants/GlobalStyles";
@@ -7,6 +7,31 @@ const LoginScreen = () => {
   const router = useRouter(); // Expo Router para navegación
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const checkBackend = async () => {
+    console.log("Intentando conectar con el backend...");
+  
+    try {
+      const response = await fetch("http://10.0.2.2:5000/");
+      
+      // Verifica si la respuesta es exitosa
+      if (!response.ok) {
+        throw new Error(`HTTP Error! Status: ${response.status}`);
+      }
+  
+      const data = await response.json();
+      console.log("✅ Conexión exitosa con el backend:", data);
+    } catch (error) {
+      console.error("❌ Error al conectar con el backend:", error);
+    }
+  };
+  
+
+  useEffect(() => {
+    console.log("Ejecutando checkBackend()...");
+    checkBackend();
+  }, []);
+  
 
   return (
     <View style={styles.container}>
