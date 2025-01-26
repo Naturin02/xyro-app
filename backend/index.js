@@ -1,20 +1,30 @@
-require("dotenv").config();
 const express = require("express");
-const cors = require("cors");
+const router = express.Router();
 
-const app = express();
-
-// Middleware
-app.use(express.json()); // Permite recibir JSON en las peticiones
-app.use(cors()); // Permite conexiones desde el móvil
-
-// Ruta de prueba
-app.get("/", (req, res) => {
-    res.json({ message: "Servidor funcionando en Express 🚀" });
+// Endpoint para verificar conexión
+router.get("/", (req, res) => {
+  res.json({ message: "API funcionando correctamente 🚀" });
 });
 
-// Configuración del puerto
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+// Endpoint para login (POST porque enviamos datos)
+router.post("/login", (req, res) => {
+  const { email, password } = req.body;
+
+  if (email === "test@example.com" && password === "123456") {
+    res.status(200).json({ message: "Inicio de sesión exitoso", token: "fake-jwt-token" });
+  } else {
+    res.status(401).json({ message: "Credenciales incorrectas" });
+  }
 });
+
+// Endpoint para registro de usuarios
+router.post("/register", (req, res) => {
+  const { email, password, username } = req.body;
+  if (!email || !password || !username) {
+    return res.status(400).json({ message: "Todos los campos son obligatorios" });
+  }
+  res.status(201).json({ message: "Usuario registrado correctamente" });
+});
+
+// Exportar rutas
+module.exports = router;
