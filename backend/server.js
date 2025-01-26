@@ -1,21 +1,24 @@
-const express = require("express");
-const cors = require("cors");
-require("dotenv").config();
-const routes = require("./index"); // Importamos las rutas
+require('dotenv').config({ path: './.env' }); // ✅ Asegura que carga correctamente el archivo .env
+const express = require('express');
+const db = require('./database'); // ✅ Importa la conexión desde database.js
 
 const app = express();
+const PORT = 5000;
 
-// Middleware
-app.use(cors()); 
-app.use(express.json()); 
+// 📌 Verifica que las variables de entorno se están cargando correctamente
+console.log("🔍 Verificando variables de entorno en server.js...");
+console.log("DB_HOST:", process.env.DB_HOST);
+console.log("DB_USER:", process.env.DB_USER);
+console.log("DB_PASSWORD:", process.env.DB_PASSWORD ? "*****" : "No definida"); 
+console.log("DB_NAME:", process.env.DB_NAME);
+console.log("DB_PORT:", process.env.DB_PORT);
 
-// Ruta de prueba
-app.get("/", (req, res) => {
-  res.json({ message: "Servidor funcionando en Express 🚀" });
+// RUTA DE PRUEBA PARA VER SI LA CONEXIÓN FUNCIONA
+app.get('/', (req, res) => {
+    res.json({ message: "Servidor funcionando en Express 🚀" });
 });
 
-// Iniciar servidor
-const PORT = process.env.PORT || 5000;
+// INICIAR SERVIDOR
 app.listen(PORT, () => {
-  console.log(`✅ Servidor corriendo en http://localhost:${PORT}`);
+    console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
 });
