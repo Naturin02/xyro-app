@@ -1,8 +1,9 @@
-// C:\Users\shiro\OneDrive\Escritorio\Exp\xyro-app\app\Herramientas\marcas.tsx
 import React from "react";
 import { View, Text, Pressable, ScrollView } from "react-native";
 import { useRouter } from "expo-router"; // Navegación con Expo Router
 import { MarcasStyles } from "../Styles/marcasStyle"; // Importando los estilos desde marcasStyle.ts
+import FooterNavigation from "../Componentes/FooterNavigation"; // Importación del FooterNavigation
+import CategoryNavigation from "../Componentes/CategoryNavigation"; // Importación del CategoryNavigation
 
 const MarcasScreen = () => {
   const router = useRouter(); // Router para navegación
@@ -20,23 +21,7 @@ const MarcasScreen = () => {
         </View>
 
         {/* Categorías */}
-        <View style={MarcasStyles.navBar}>
-          <Pressable style={MarcasStyles.navItem} onPress={() => alert("Marcas")}>
-            <Text style={MarcasStyles.navText}>Marcas</Text>
-          </Pressable>
-          <Pressable style={MarcasStyles.navItem} onPress={() => alert("Mujer")}>
-            <Text style={MarcasStyles.navText}>Mujer</Text>
-          </Pressable>
-          <Pressable style={MarcasStyles.navItem} onPress={() => alert("Hombre")}>
-            <Text style={MarcasStyles.navText}>Hombre</Text>
-          </Pressable>
-          <Pressable style={MarcasStyles.navItem} onPress={() => alert("Belleza")}>
-            <Text style={MarcasStyles.navText}>Belleza</Text>
-          </Pressable>
-          <Pressable style={MarcasStyles.navItem} onPress={() => alert("Calzado")}>
-            <Text style={MarcasStyles.navText}>Calzado</Text>
-          </Pressable>
-        </View>
+        <CategoryNavigation /> {/* Aquí se coloca el componente CategoryNavigation */}
 
         {/* Banner de promoción */}
         <View style={MarcasStyles.banner}>
@@ -62,18 +47,8 @@ const MarcasScreen = () => {
         </View>
       </ScrollView>
 
-      {/* Navegación inferior fija */}
-      <View style={MarcasStyles.footer}>
-        <Pressable style={MarcasStyles.footerItem} onPress={() => router.push("/Herramientas/marcas")}>
-          <Text style={MarcasStyles.footerText}>🏷️ Marcas</Text>
-        </Pressable>
-        <Pressable style={MarcasStyles.footerItem} onPress={() => alert("/categorías")}>
-          <Text style={MarcasStyles.footerText}>📂 Categorías</Text>
-        </Pressable>
-        <Pressable style={MarcasStyles.footerItem} onPress={() => router.push("/Herramientas/cuenta")}>
-          <Text style={MarcasStyles.footerText}>👤 Cuenta</Text>
-        </Pressable>
-      </View>
+      {/* Footer de navegación */}
+      <FooterNavigation />
     </View>
   );
 };

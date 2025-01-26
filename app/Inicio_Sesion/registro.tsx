@@ -1,4 +1,3 @@
-// C:\Users\shiro\OneDrive\Escritorio\Exp\xyro-app\app\Inicio_Sesion\registro.tsx
 import React, { useState } from "react";
 import { View, Text, TextInput, Pressable, StyleSheet, Image } from "react-native";
 import { useRouter } from "expo-router"; // Expo Router para la navegación
@@ -10,6 +9,8 @@ const RegistroScreen = () => {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [birthdate, setBirthdate] = useState("");
+  const [firstName, setFirstName] = useState(""); // Nuevo campo para el primer nombre
+  const [lastName, setLastName] = useState(""); // Nuevo campo para el apellido
   const [termsAccepted, setTermsAccepted] = useState(false);
 
   return (
@@ -36,6 +37,22 @@ const RegistroScreen = () => {
         value={password}
         onChangeText={setPassword}
       />
+      <View style={registroStyles.doubleInput}>
+        <TextInput
+          style={[registroStyles.input, registroStyles.halfInput]}
+          placeholder="Nombre"
+          placeholderTextColor="#999"
+          value={firstName}
+          onChangeText={setFirstName} // Manejador para el nombre
+        />
+        <TextInput
+          style={[registroStyles.input, registroStyles.halfInput]}
+          placeholder="Apellido"
+          placeholderTextColor="#999"
+          value={lastName}
+          onChangeText={setLastName} // Manejador para el apellido
+        />
+      </View>
       <View style={registroStyles.doubleInput}>
         <TextInput
           style={[registroStyles.input, registroStyles.halfInput]}
