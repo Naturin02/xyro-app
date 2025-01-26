@@ -37,38 +37,55 @@ const RegistroScreen = () => {
         value={password}
         onChangeText={setPassword}
       />
-      <View style={registroStyles.doubleInput}>
-        <TextInput
-          style={[registroStyles.input, registroStyles.halfInput]}
-          placeholder="Nombre"
-          placeholderTextColor="#999"
-          value={firstName}
-          onChangeText={setFirstName} // Manejador para el nombre
-        />
-        <TextInput
-          style={[registroStyles.input, registroStyles.halfInput]}
-          placeholder="Apellido"
-          placeholderTextColor="#999"
-          value={lastName}
-          onChangeText={setLastName} // Manejador para el apellido
-        />
-      </View>
-      <View style={registroStyles.doubleInput}>
-        <TextInput
-          style={[registroStyles.input, registroStyles.halfInput]}
-          placeholder="Nombre de usuario"
-          placeholderTextColor="#999"
-          value={username}
-          onChangeText={setUsername}
-        />
-        <TextInput
-          style={[registroStyles.input, registroStyles.halfInput]}
-          placeholder="dd/mm/aaaa"
-          placeholderTextColor="#999"
-          value={birthdate}
-          onChangeText={setBirthdate}
-        />
-      </View>
+   <View style={registroStyles.doubleInput}>
+  <TextInput
+    style={[registroStyles.input, registroStyles.halfInput]}
+    placeholder="Nombre"
+    placeholderTextColor="#999"
+    value={firstName}
+    onChangeText={(value) => {
+      // Permitir solo letras
+      if (/^[a-zA-Z\s]*$/.test(value)) {
+        setFirstName(value); // Actualizar solo si es válido
+      }
+    }} // Manejador para el nombre
+  />
+  <TextInput
+    style={[registroStyles.input, registroStyles.halfInput]}
+    placeholder="Apellido"
+    placeholderTextColor="#999"
+    value={lastName}
+    onChangeText={(value) => {
+      // Permitir solo letras
+      if (/^[a-zA-Z\s]*$/.test(value)) {
+        setLastName(value); // Actualizar solo si es válido
+      }
+    }} // Manejador para el apellido
+  />
+</View>
+
+      <TextInput
+  style={[registroStyles.input, registroStyles.halfInput]}
+  placeholder="dd/mm/aaaa"
+  placeholderTextColor="#999"
+  value={birthdate}
+  onChangeText={(value) => {
+    // Permitir solo números y formatear como dd/mm/yyyy
+    const formattedValue = value.replace(/[^0-9]/g, ""); // Eliminar todo excepto números
+    let finalValue = formattedValue;
+
+    // Formato dd/mm/yyyy
+    if (formattedValue.length >= 2) {
+      finalValue = `${formattedValue.slice(0, 2)}/${formattedValue.slice(2)}`;
+    }
+    if (formattedValue.length >= 4) {
+      finalValue = `${formattedValue.slice(0, 2)}/${formattedValue.slice(2, 4)}/${formattedValue.slice(4, 8)}`;
+    }
+
+    setBirthdate(finalValue); // Actualizar el valor de la fecha de nacimiento formateada
+  }}
+  keyboardType="number-pad" // Asegura que solo se pueda escribir números
+/>
 
       {/* Checkbox de términos y condiciones */}
       <Pressable style={registroStyles.checkboxContainer} onPress={() => setTermsAccepted(!termsAccepted)}>
