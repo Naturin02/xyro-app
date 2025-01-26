@@ -1,6 +1,6 @@
 // C:\Users\shiro\OneDrive\Escritorio\Exp\xyro-app\app\Inicio_Sesion\login.tsx
 import React, { useState, useEffect } from "react";
-import { Image, StyleSheet, View, Pressable, Text, TextInput } from "react-native";
+import { Image, View, Pressable, Text, TextInput } from "react-native";
 import { useRouter } from "expo-router"; // Navegación con Expo Router
 import { loginStyles } from "../Styles/loginStyle"; // Ruta corregida a loginStyle.ts
 
