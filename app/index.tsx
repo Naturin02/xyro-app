@@ -18,7 +18,7 @@ const HomeScreen = () => {
       <Text style={styles.title}>Bienvenido a Xyro{"\n"}N°1 en México</Text>
 
       {/* Botón "Continuar" */}
-      <Pressable style={styles.button} onPress={() => router.push("/login")}>
+      <Pressable style={styles.button} onPress={() => router.push("/Inicio_Sesion/login")}>
         <Text style={styles.buttonText}>Continuar</Text>
       </Pressable>
     </View>
