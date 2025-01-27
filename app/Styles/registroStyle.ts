@@ -83,3 +83,5 @@ export const registroStyles = StyleSheet.create({
     fontFamily: FontFamily.spartan,
   },
 });
+
+export default registroStyles;

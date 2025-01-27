@@ -38,3 +38,5 @@ export const CuentaStyles = StyleSheet.create({
     color: Color.colorWhite, // Cambiado a blanco para resaltar
   },
 });
+
+export default CuentaStyles;

@@ -1,8 +1,8 @@
 // C:\Users\shiro\OneDrive\Escritorio\Exp\xyro-app\app\Styles\verificacionCorreoStyle.ts
 import { StyleSheet } from "react-native";
-import { Color, FontFamily, FontSize } from "../../constants/GlobalStyles"; // Ruta correcta a tus constantes
+import { Color, FontFamily, FontSize } from "../../constants/GlobalStyles"; // Ajusta la ruta si es necesario
 
-export const verificacionCorreoStyles = StyleSheet.create({
+const verificacionCorreoStyles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Color.colorWhite,
@@ -57,3 +57,5 @@ export const verificacionCorreoStyles = StyleSheet.create({
     fontSize: FontSize.size_sm,
   },
 });
+
+export default verificacionCorreoStyles; // Asegúrate de exportar como default

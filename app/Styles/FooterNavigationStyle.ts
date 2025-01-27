@@ -25,3 +25,5 @@ export const FooterNavigationStyle = StyleSheet.create({
     color: Color.colorBlack,
   },
 });
+
+export default FooterNavigationStyle;

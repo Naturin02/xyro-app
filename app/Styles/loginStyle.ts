@@ -96,3 +96,5 @@ export const loginStyles = StyleSheet.create({
     color: Color.colorBlack,
   },
 });
+
+export default loginStyles;

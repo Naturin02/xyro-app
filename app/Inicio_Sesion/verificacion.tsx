@@ -2,7 +2,7 @@
 import React from "react";
 import { View, Text, Pressable, Image } from "react-native";
 import { useRouter } from "expo-router";
-import { verificacionCorreoStyles } from "../Styles/verificacionCorreoStyle"; // Ruta correcta a los estilos
+import verificacionCorreoStyles from "../Styles/verificacionCorreoStyle"; // Importación default
 
 const VerificacionCorreo = () => {
   const router = useRouter();

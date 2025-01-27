@@ -77,3 +77,5 @@ export const MarcasStyles = StyleSheet.create({
     fontSize: FontSize.size_smi,
   },
 });
+
+export default MarcasStyles;

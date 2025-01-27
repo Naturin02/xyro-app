@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Pressable, Image } from "react-native";
+import { View, Text, TextInput, Pressable, Image, Alert } from "react-native";
 import { useRouter } from "expo-router"; // Expo Router para la navegación
-import { registroStyles } from "../Styles/registroStyle"; // Ruta corregida a registroStyle.ts
+import { registroStyles } from "../Styles/registroStyle"; // Importación correcta a los estilos
 
 const RegistroScreen = () => {
   const router = useRouter();
@@ -18,20 +18,20 @@ const RegistroScreen = () => {
       alert("Por favor completa todos los campos.");
       return;
     }
-  
-    // 📌 Validar y formatear fecha antes de enviarla al backend
+
+    // Validar y formatear la fecha antes de enviarla al backend
     const partesFecha = birthdate.split("/");
     if (partesFecha.length === 3) {
       const dia = partesFecha[0].padStart(2, "0");
       const mes = partesFecha[1].padStart(2, "0");
       const año = partesFecha[2];
-  
+
       birthdate = `${dia}/${mes}/${año}`;
     } else {
       alert("Formato de fecha inválido. Usa DD/MM/YYYY");
       return;
     }
-  
+
     try {
       const response = await fetch("http://10.2.8.34:5000/api/usuarios/registro", {
         method: "POST",
@@ -46,11 +46,11 @@ const RegistroScreen = () => {
           fecha_nacimiento: birthdate,
         }),
       });
-  
+
       const data = await response.json();
       if (response.ok) {
         alert(data.message);
-        router.push("/Inicio_Sesion/verificacion");
+        router.push("/Inicio_Sesion/verificacion"); // Asegúrate que la ruta de la verificación sea correcta
       } else {
         alert("Error en el registro: " + data.error);
       }
@@ -59,7 +59,6 @@ const RegistroScreen = () => {
       alert("Error en la conexión con el servidor");
     }
   };
-  
 
   return (
     <View style={registroStyles.container}>
@@ -119,17 +118,19 @@ const RegistroScreen = () => {
           placeholderTextColor="#999"
           value={birthdate}
           onChangeText={(value) => {
-            const formattedValue = value.replace(/[^0-9]/g, "");
-            let finalValue = formattedValue;
+            // Eliminar cualquier carácter que no sea número o barra
+            let formattedValue = value.replace(/[^0-9\/]/g, "");
 
-            if (formattedValue.length >= 2) {
-              finalValue = `${formattedValue.slice(0, 2)}/${formattedValue.slice(2)}`;
+            // Si hay un número de 2 dígitos para el día, añadir la barra
+            if (formattedValue.length === 2 && !formattedValue.includes("/")) {
+              formattedValue = `${formattedValue.slice(0, 2)}/`;
             }
-            if (formattedValue.length >= 4) {
-              finalValue = `${formattedValue.slice(0, 2)}/${formattedValue.slice(2, 4)}/${formattedValue.slice(4, 8)}`;
+            // Si hay un número de 2 dígitos para el mes, añadir la barra
+            if (formattedValue.length === 5 && !formattedValue.includes("/")) {
+              formattedValue = `${formattedValue.slice(0, 5)}/`;
             }
 
-            setBirthdate(finalValue);
+            setBirthdate(formattedValue);
           }}
           keyboardType="number-pad"
         />
@@ -147,7 +148,7 @@ const RegistroScreen = () => {
       <Pressable
         style={[registroStyles.registerButton, !termsAccepted && registroStyles.disabledButton]}
         disabled={!termsAccepted}
-        onPress={handleRegister} // ✅ Ahora el botón llama a la función correctamente
+        onPress={handleRegister} // Llama al registro y luego navega a la verificación
       >
         <Text style={registroStyles.registerButtonText}>Crear cuenta</Text>
       </Pressable>
