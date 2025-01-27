@@ -13,7 +13,7 @@ const LoginScreen = () => {
     console.log("Intentando conectar con el backend...");
 
     try {
-      const response = await fetch("http://10.0.2.2:5000/");
+      const response = await fetch("http://10.2.8.34:5000/");
 
       // Verifica si la respuesta es exitosa
       if (!response.ok) {

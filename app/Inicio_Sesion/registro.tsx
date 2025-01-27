@@ -13,27 +13,40 @@ const RegistroScreen = () => {
   const [lastName, setLastName] = useState(""); // Nuevo campo para el apellido
   const [termsAccepted, setTermsAccepted] = useState(false);
 
-  // ✅ Mueve `handleRegister` dentro del componente para que pueda acceder a los estados
   const handleRegister = async () => {
     if (!email || !password || !username || !birthdate) {
       alert("Por favor completa todos los campos.");
       return;
     }
-
+  
+    // 📌 Validar y formatear fecha antes de enviarla al backend
+    const partesFecha = birthdate.split("/");
+    if (partesFecha.length === 3) {
+      const dia = partesFecha[0].padStart(2, "0");
+      const mes = partesFecha[1].padStart(2, "0");
+      const año = partesFecha[2];
+  
+      birthdate = `${dia}/${mes}/${año}`;
+    } else {
+      alert("Formato de fecha inválido. Usa DD/MM/YYYY");
+      return;
+    }
+  
     try {
-      const response = await fetch("http://10.0.2.2:5000/api/usuarios/registro", {
+      const response = await fetch("http://10.2.8.34:5000/api/usuarios/registro", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          nombre: firstName, // Agregar nombre
           correo: email,
-          contrasena: password, // ✅ Asegurar que se llama igual que en la BD
+          contrasena: password,
           nombre_usuario: username,
           fecha_nacimiento: birthdate,
         }),
       });
-
+  
       const data = await response.json();
       if (response.ok) {
         alert(data.message);
@@ -46,6 +59,7 @@ const RegistroScreen = () => {
       alert("Error en la conexión con el servidor");
     }
   };
+  
 
   return (
     <View style={registroStyles.container}>
@@ -101,7 +115,7 @@ const RegistroScreen = () => {
         />
         <TextInput
           style={[registroStyles.input, registroStyles.halfInput]}
-          placeholder="dd/mm/aaaa"
+          placeholder="DD/MM/AAAA"
           placeholderTextColor="#999"
           value={birthdate}
           onChangeText={(value) => {
