@@ -1,10 +1,9 @@
 const mysql = require('mysql2');
 const dotenv = require('dotenv');
-const path = require('path');
 
-dotenv.config({ path: path.resolve(__dirname, '../.env') });
+dotenv.config();
 
-// 🔹 Configuración de la conexión a MySQL
+// Configuración de la conexión
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -14,7 +13,7 @@ const db = mysql.createConnection({
 });
 
 // Conectar a la base de datos
-db.connect((err) => {
+db.connect(err => {
   if (err) {
     console.error("❌ Error al conectar a MySQL:", err);
     return;
