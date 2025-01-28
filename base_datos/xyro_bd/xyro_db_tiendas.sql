@@ -30,7 +30,7 @@ CREATE TABLE `tiendas` (
   `telefono` varchar(15) DEFAULT NULL,
   PRIMARY KEY (`nombre_tienda`),
   UNIQUE KEY `correo` (`correo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

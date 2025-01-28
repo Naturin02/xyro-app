@@ -39,7 +39,7 @@ CREATE TABLE `pedidos` (
   KEY `nombre_tienda` (`nombre_tienda`),
   CONSTRAINT `pedidos_ibfk_1` FOREIGN KEY (`nombre_cliente`, `apellido_cliente`) REFERENCES `usuarios` (`nombre`, `apellido`),
   CONSTRAINT `pedidos_ibfk_2` FOREIGN KEY (`nombre_tienda`) REFERENCES `tiendas` (`nombre_tienda`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

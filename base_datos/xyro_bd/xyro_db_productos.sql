@@ -35,7 +35,7 @@ CREATE TABLE `productos` (
   KEY `nombre_categoria` (`nombre_categoria`),
   CONSTRAINT `productos_ibfk_1` FOREIGN KEY (`nombre_tienda`) REFERENCES `tiendas` (`nombre_tienda`),
   CONSTRAINT `productos_ibfk_2` FOREIGN KEY (`nombre_categoria`) REFERENCES `categorias` (`nombre_categoria`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
