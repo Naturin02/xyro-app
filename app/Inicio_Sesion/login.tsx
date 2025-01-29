@@ -84,8 +84,10 @@ const LoginScreen = () => {
         onChangeText={setPassword}
       />
 
-      <Pressable onPress={() => console.log("Olvidaste tu contraseña")} style={loginStyles.forgotPassword}>
-        <Text style={loginStyles.forgotPasswordText}>¿Olvidaste tu contraseña?</Text>
+      <Pressable 
+      onPress={() => router.push("/Inicio_Sesion/Recuperar")} 
+      style={loginStyles.forgotPassword}>
+      <Text style={loginStyles.forgotPasswordText}>¿Olvidaste tu contraseña?</Text>
       </Pressable>
 
       {/* ✅ Botón de inicio de sesión actualizado */}
