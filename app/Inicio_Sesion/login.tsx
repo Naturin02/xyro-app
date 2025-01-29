@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Image, View, Pressable, Text, TextInput } from "react-native";
+import { Image, View, Pressable, Text, TextInput, Alert } from "react-native";
 import { useRouter } from "expo-router"; // Navegación con Expo Router
 import { loginStyles } from "../Styles/loginStyle"; // Ruta corregida a loginStyle.ts
+import { API_URL } from "../../backend/utils/config";
 
 const LoginScreen = () => {
   const router = useRouter(); // Expo Router para navegación
@@ -12,12 +13,8 @@ const LoginScreen = () => {
     console.log("Intentando conectar con el backend...");
 
     try {
-      const response = await fetch("http://192.168.137.1:5000/");
-
-      // Verifica si la respuesta es exitosa
-      if (!response.ok) {
-        throw new Error(`HTTP Error! Status: ${response.status}`);
-      }
+      const response = await fetch(`${API_URL}/`); // Usar API_URL aquí
+      if (!response.ok) throw new Error(`HTTP Error! Status: ${response.status}`);
 
       const data = await response.json();
       console.log("✅ Conexión exitosa con el backend:", data);
@@ -30,6 +27,35 @@ const LoginScreen = () => {
     console.log("Ejecutando checkBackend()...");
     checkBackend();
   }, []);
+
+  // ✅ Función para manejar el inicio de sesión
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert("Error", "Todos los campos son obligatorios");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_URL}/api/usuarios/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ correo: email, contrasena: password })
+      });
+
+      const data = await response.json();
+      console.log("📌 Respuesta del servidor:", data);
+
+      if (response.ok) {
+        Alert.alert("Inicio de sesión exitoso", `Bienvenido ${data.usuario.nombre}`);
+        router.replace("/Herramientas/marcas"); // ✅ Redirigir a la pantalla principal
+      } else {
+        Alert.alert("Error", data.error || "Correo o contraseña incorrectos");
+      }
+    } catch (error) {
+      console.error("❌ Error en el inicio de sesión:", error);
+      Alert.alert("Error", "Hubo un problema con el inicio de sesión");
+    }
+  };
 
   return (
     <View style={loginStyles.container}>
@@ -58,16 +84,12 @@ const LoginScreen = () => {
         onChangeText={setPassword}
       />
 
-      {/* Enlace de Olvido de Contraseña */}
-      <Pressable
-        onPress={() => router.push("/Inicio_Sesion/Recuperar")} // Redirige a la pantalla de recuperación
-        style={loginStyles.forgotPassword}
-      >
+      <Pressable onPress={() => console.log("Olvidaste tu contraseña")} style={loginStyles.forgotPassword}>
         <Text style={loginStyles.forgotPasswordText}>¿Olvidaste tu contraseña?</Text>
       </Pressable>
 
-      {/* Botón de inicio de sesión */}
-      <Pressable style={loginStyles.loginButton} onPress={() => router.replace("/Herramientas/marcas")}>
+      {/* ✅ Botón de inicio de sesión actualizado */}
+      <Pressable style={loginStyles.loginButton} onPress={handleLogin}>
         <Text style={loginStyles.loginButtonText}>Iniciar sesión</Text>
       </Pressable>
 

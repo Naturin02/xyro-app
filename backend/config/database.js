@@ -1,24 +1,22 @@
-const mysql = require('mysql2');
-const dotenv = require('dotenv');
+const mysql = require("mysql2");
+require("dotenv").config();
 
-dotenv.config();
+console.log("Intentando conectar con la base de datos...");
 
-// Configuración de la conexión
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  port: process.env.DB_PORT
+const connection = mysql.createConnection({
+    host: process.env.DB_HOST || "127.0.0.1",
+    user: process.env.DB_USER || "root",
+    password: process.env.DB_PASSWORD || "",
+    database: process.env.DB_NAME || "xyro_db",
+    port: process.env.DB_PORT || 3306
 });
 
-// Conectar a la base de datos
-db.connect(err => {
-  if (err) {
-    console.error("❌ Error al conectar a MySQL:", err);
-    return;
-  }
-  console.log("✅ Conectado a la base de datos MySQL 🚀");
+connection.connect((err) => {
+    if (err) {
+        console.error("❌ Error al conectar a MySQL:", err.message);
+        return;
+    }
+    console.log("✅ Conexión exitosa a MySQL 🚀");
 });
 
-module.exports = db;
+module.exports = connection;

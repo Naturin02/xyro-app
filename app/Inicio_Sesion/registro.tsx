@@ -2,56 +2,55 @@ import React, { useState } from "react";
 import { View, Text, TextInput, Pressable, Image, Alert, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router"; // Expo Router para la navegación
 import { registroStyles } from "../Styles/registroStyle"; // Importación correcta a los estilos
+import { API_URL } from "../../backend/utils/config"; // Usar API_URL centralizada
 
 const RegistroScreen = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
-  const [firstName, setFirstName] = useState(""); // Nuevo campo para el primer nombre
-  const [lastName, setLastName] = useState(""); // Nuevo campo para el apellido
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [telefono, setTelefono] = useState(""); // Nuevo campo de teléfono
   const [termsAccepted, setTermsAccepted] = useState(false);
 
+  // Función para manejar el registro
   const handleRegister = async () => {
-    // Limpiar los valores y eliminar espacios en blanco al principio y al final
-    const trimmedEmail = email.trim();
-    const trimmedPassword = password.trim();
-    const trimmedUsername = username.trim();
-    const trimmedFirstName = firstName.trim();
-    const trimmedLastName = lastName.trim();
-
-    // Verificar si los campos están vacíos
-    if (!trimmedEmail || !trimmedPassword || !trimmedUsername || !trimmedFirstName || !trimmedLastName) {
-      alert("Por favor completa todos los campos.");
-      return;
+    if (!firstName || !lastName || !email || !password || !telefono || !username) {
+        Alert.alert("Error", "Todos los campos son obligatorios");
+        return;
     }
 
     try {
-      const response = await fetch("http://192.168.137.1:5000/api/usuarios/registro", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          nombre: trimmedFirstName, // Agregar nombre
-          correo: trimmedEmail,
-          contrasena: trimmedPassword,
-          nombre_usuario: trimmedUsername,
-        }),
-      });
+        const response = await fetch(`${API_URL}/api/usuarios/registro`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                nombre: firstName,
+                apellido: lastName,
+                correo: email,
+                contrasena: password,
+                telefono: telefono,
+                nombre_usuario: username
+            })
+        });
 
-      const data = await response.json();
-      if (response.ok) {
-        alert(data.message);
-        router.push("/Inicio_Sesion/verificacion"); // Asegúrate que la ruta de la verificación sea correcta
-      } else {
-        alert("Error en el registro: " + data.error);
-      }
+        const data = await response.json();
+        console.log("Respuesta del servidor:", data);
+
+        if (response.ok) {
+            Alert.alert("Registro exitoso", "Usuario registrado correctamente");
+            router.replace("/Inicio_Sesion/login"); // Redirigir al login
+        } else {
+            Alert.alert("Error en el registro", data.error);
+        }
     } catch (error) {
-      console.error("❌ Error:", error);
-      alert("Error en la conexión con el servidor");
+        console.error("Error en el registro:", error);
+        Alert.alert("Error", "Hubo un problema con el registro");
     }
-  };
+};
 
   return (
     <View style={registroStyles.container}>
@@ -62,65 +61,27 @@ const RegistroScreen = () => {
       </View>
 
       {/* Campos del formulario */}
-      <TextInput
-        style={registroStyles.input}
-        placeholder="Correo electrónico"
-        placeholderTextColor="#999"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        style={registroStyles.input}
-        placeholder="Contraseña"
-        placeholderTextColor="#999"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
+      <TextInput style={registroStyles.input} placeholder="Correo electrónico" placeholderTextColor="#999" value={email} onChangeText={setEmail} />
+      <TextInput style={registroStyles.input} placeholder="Contraseña" placeholderTextColor="#999" secureTextEntry value={password} onChangeText={setPassword} />
+      
       <View style={registroStyles.doubleInput}>
-        <TextInput
-          style={[registroStyles.input, registroStyles.halfInput]}
-          placeholder="Nombre"
-          placeholderTextColor="#999"
-          value={firstName}
-          onChangeText={(value) => {
-            if (/^[a-zA-Z\s]*$/.test(value)) setFirstName(value);
-          }}
-        />
-        <TextInput
-          style={[registroStyles.input, registroStyles.halfInput]}
-          placeholder="Apellido"
-          placeholderTextColor="#999"
-          value={lastName}
-          onChangeText={(value) => {
-            if (/^[a-zA-Z\s]*$/.test(value)) setLastName(value);
-          }}
-        />
+        <TextInput style={[registroStyles.input, registroStyles.halfInput]} placeholder="Nombre" placeholderTextColor="#999" value={firstName} onChangeText={setFirstName} />
+        <TextInput style={[registroStyles.input, registroStyles.halfInput]} placeholder="Apellido" placeholderTextColor="#999" value={lastName} onChangeText={setLastName} />
       </View>
+
       <View style={registroStyles.doubleInput}>
-        <TextInput
-          style={[registroStyles.input, registroStyles.halfInput]}
-          placeholder="Nombre de usuario"
-          placeholderTextColor="#999"
-          value={username}
-          onChangeText={setUsername}
-        />
+        <TextInput style={[registroStyles.input, registroStyles.halfInput]} placeholder="Nombre de usuario" placeholderTextColor="#999" value={username} onChangeText={setUsername} />
+        <TextInput style={[registroStyles.input, registroStyles.halfInput]} placeholder="Teléfono" placeholderTextColor="#999" keyboardType="phone-pad" value={telefono} onChangeText={setTelefono} />
       </View>
 
       {/* Checkbox de términos y condiciones */}
       <Pressable style={registroStyles.checkboxContainer} onPress={() => setTermsAccepted(!termsAccepted)}>
         <View style={[registroStyles.checkbox, termsAccepted && registroStyles.checkboxChecked]} />
-        <Text style={registroStyles.checkboxText}>
-          He leído y acepto las Condiciones de uso, Privacidad, Cookies y correos electrónicos
-        </Text>
+        <Text style={registroStyles.checkboxText}>He leído y acepto las Condiciones de uso, Privacidad, Cookies y correos electrónicos</Text>
       </Pressable>
 
       {/* Botón de registro */}
-      <TouchableOpacity
-        style={[registroStyles.registerButton, !termsAccepted && registroStyles.disabledButton]}
-        disabled={!termsAccepted}
-        onPress={handleRegister} // Llama al registro y luego navega a la verificación
-      >
+      <TouchableOpacity style={[registroStyles.registerButton, !termsAccepted && registroStyles.disabledButton]} disabled={!termsAccepted} onPress={handleRegister}>
         <Text style={registroStyles.registerButtonText}>Crear cuenta</Text>
       </TouchableOpacity>
     </View>
