@@ -1,5 +1,5 @@
-import React from "react";
-import { View, Text, Pressable, Alert } from "react-native";
+import React, { useState } from "react";
+import { View, Text, Pressable, Alert, TextInput, Modal } from "react-native";
 import { useRouter } from "expo-router";
 import { CuentaStyles } from "../Styles/cuentaStyle";
 import FooterNavigation from "../Componentes/FooterNavigation";
@@ -7,16 +7,20 @@ import { Ionicons } from "@expo/vector-icons";
 
 const CuentaScreen = () => {
   const router = useRouter();
+  const [password, setPassword] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
 
   const handleDeleteAccount = () => {
-    Alert.alert(
-      "Eliminar cuenta",
-      "¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.",
-      [
-        { text: "Cancelar", style: "cancel" },
-        { text: "Eliminar", style: "destructive", onPress: () => alert("Cuenta eliminada") }
-      ]
-    );
+    setModalVisible(true);
+  };
+
+  const confirmDeleteAccount = () => {
+    if (password.trim() === "") {
+      Alert.alert("Error", "Debes ingresar tu contraseña para continuar.");
+    } else {
+      setModalVisible(false);
+      router.replace("/Inicio_Sesion/login");
+    }
   };
 
   return (
@@ -57,6 +61,36 @@ const CuentaScreen = () => {
       <Pressable style={CuentaStyles.deleteButton} onPress={handleDeleteAccount}> 
         <Text style={CuentaStyles.deleteButtonText}>Eliminar Cuenta</Text>
       </Pressable>
+
+      {/* Modal para confirmar eliminación de cuenta */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={CuentaStyles.modalOverlay}>
+          <View style={CuentaStyles.modalContainer}>
+            <Text style={CuentaStyles.modalTitle}>Confirmar Eliminación</Text>
+            <Text style={CuentaStyles.modalText}>Ingresa tu contraseña para eliminar tu cuenta:</Text>
+            <TextInput
+              style={CuentaStyles.input}
+              placeholder="Contraseña"
+              secureTextEntry
+              value={password}
+              onChangeText={setPassword}
+            />
+            <View style={CuentaStyles.modalButtons}>
+              <Pressable style={CuentaStyles.cancelButton} onPress={() => setModalVisible(false)}>
+                <Text style={CuentaStyles.cancelButtonText}>Cancelar</Text>
+              </Pressable>
+              <Pressable style={CuentaStyles.confirmButton} onPress={confirmDeleteAccount}>
+                <Text style={CuentaStyles.confirmButtonText}>Eliminar</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
 
       {/* Footer de navegación */}
       <FooterNavigation />

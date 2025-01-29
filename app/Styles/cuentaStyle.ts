@@ -67,6 +67,65 @@ export const CuentaStyles = StyleSheet.create({
     fontFamily: FontFamily.juaRegular,
     color: Color.colorWhite,
   },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)", 
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContainer: {
+    backgroundColor: "#fff",
+    width: "85%",
+    padding: 20,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: FontSize.size_5xl,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  modalText: {
+    fontSize: FontSize.size_mini,
+    marginBottom: 15,
+    textAlign: "center",
+  },
+  input: {
+    width: "100%",
+    height: 40,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    marginBottom: 15,
+  },
+  modalButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  cancelButton: {
+    flex: 1,
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: "center",
+    backgroundColor: "#ccc",
+    marginRight: 5,
+  },
+  cancelButtonText: {
+    color: "#333",
+    fontWeight: "bold",
+  },
+  confirmButton: {
+    flex: 1,
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: "center",
+    backgroundColor: "red",
+    marginLeft: 5,
+  },
+  confirmButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
 });
-
-export default CuentaStyles;
