@@ -1,34 +1,96 @@
-
-// C:\Users\shiro\OneDrive\Escritorio\Exp\xyro-app\app\Inicio_Sesion\CuentaScreen.tsx
-import React from "react";
-import { View, Text, Pressable } from "react-native";
+import React, { useState } from "react";
+import { View, Text, Pressable, Alert, TextInput, Modal } from "react-native";
 import { useRouter } from "expo-router";
-import { CuentaStyles } from "../Styles/cuentaStyle"; // Ruta corregida para importar los estilos
-import FooterNavigation from "../Componentes/FooterNavigation"; // Importa FooterNavigation
+import { CuentaStyles } from "../Styles/cuentaStyle";
+import FooterNavigation from "../Componentes/FooterNavigation";
+import { Ionicons } from "@expo/vector-icons";
 
 const CuentaScreen = () => {
-  const router = useRouter(); // Expo Router para navegación
+  const router = useRouter();
+  const [password, setPassword] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleDeleteAccount = () => {
+    setModalVisible(true);
+  };
+
+  const confirmDeleteAccount = () => {
+    if (password.trim() === "") {
+      Alert.alert("Error", "Debes ingresar tu contraseña para continuar.");
+    } else {
+      setModalVisible(false);
+      router.replace("/Inicio_Sesion/login");
+    }
+  };
 
   return (
     <View style={CuentaStyles.container}>
-      <Text style={CuentaStyles.title}>Mi Cuenta</Text>
+      {/* Encabezado */}
+      <View style={CuentaStyles.header}>
+        <Pressable onPress={() => router.back()}>
+          <Ionicons name="arrow-back" size={28} color="#333" />
+        </Pressable>
+        <Text style={CuentaStyles.headerTitle}>Mi cuenta</Text>
+        <Pressable onPress={() => alert("Carrito")}> 
+          <Ionicons name="cart-outline" size={28} color="#333" />
+        </Pressable>
+      </View>
 
-      <Pressable style={CuentaStyles.button} onPress={() => alert("Mis pedidos")}>
-        <Text style={CuentaStyles.buttonText}>Mis pedidos</Text>
+      {/* Mensaje de bienvenida */}
+      <View style={CuentaStyles.userContainer}>
+        <Text style={CuentaStyles.userText}>¡Hola!</Text>
+      </View>
+
+      {/* Opciones de cuenta */}
+      <Pressable style={CuentaStyles.optionButton} onPress={() => alert("Mis pedidos")}> 
+        <Text style={CuentaStyles.optionText}>Mis pedidos</Text>
+      </Pressable>
+      <Pressable style={CuentaStyles.optionButton} onPress={() => alert("Mis datos")}> 
+        <Text style={CuentaStyles.optionText}>Mis datos</Text>
+      </Pressable>
+      <Pressable style={CuentaStyles.optionButton} onPress={() => alert("Devoluciones")}> 
+        <Text style={CuentaStyles.optionText}>Devoluciones</Text>
       </Pressable>
 
-      <Pressable style={CuentaStyles.button} onPress={() => alert("Mis datos")}>
-        <Text style={CuentaStyles.buttonText}>Mis datos</Text>
+      {/* Botón de cerrar sesión */}
+      <Pressable style={CuentaStyles.logoutButton} onPress={() => router.replace("/Inicio_Sesion/login")}> 
+        <Text style={CuentaStyles.logoutButtonText}>Cerrar Sesión</Text>
       </Pressable>
 
-      <Pressable style={CuentaStyles.button} onPress={() => alert("Devoluciones")}>
-        <Text style={CuentaStyles.buttonText}>Devoluciones</Text>
+      {/* Botón para eliminar cuenta */}
+      <Pressable style={CuentaStyles.deleteButton} onPress={handleDeleteAccount}> 
+        <Text style={CuentaStyles.deleteButtonText}>Eliminar Cuenta</Text>
       </Pressable>
 
-      {/* Botón Cerrar sesión */}
-      <Pressable style={CuentaStyles.logoutButton} onPress={() => router.replace("/Inicio_Sesion/login")}>
-        <Text style={CuentaStyles.buttonText}>Cerrar Sesión</Text>
-      </Pressable>
+      {/* Modal para confirmar eliminación de cuenta */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={CuentaStyles.modalOverlay}>
+          <View style={CuentaStyles.modalContainer}>
+            <Text style={CuentaStyles.modalTitle}>Confirmar Eliminación</Text>
+            <Text style={CuentaStyles.modalText}>Ingresa tu contraseña para eliminar tu cuenta:</Text>
+            <TextInput
+              style={CuentaStyles.input}
+              placeholder="Contraseña"
+              secureTextEntry
+              value={password}
+              onChangeText={setPassword}
+            />
+            <View style={CuentaStyles.modalButtons}>
+              <Pressable style={CuentaStyles.cancelButton} onPress={() => setModalVisible(false)}>
+                <Text style={CuentaStyles.cancelButtonText}>Cancelar</Text>
+              </Pressable>
+              <Pressable style={CuentaStyles.confirmButton} onPress={confirmDeleteAccount}>
+                <Text style={CuentaStyles.confirmButtonText}>Eliminar</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
 
       {/* Footer de navegación */}
       <FooterNavigation />
