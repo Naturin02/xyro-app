@@ -32,7 +32,7 @@ CREATE TABLE `devoluciones` (
   PRIMARY KEY (`numero_devolucion`),
   KEY `numero_pedido` (`numero_pedido`),
   CONSTRAINT `devoluciones_ibfk_1` FOREIGN KEY (`numero_pedido`) REFERENCES `pedidos` (`numero_pedido`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
