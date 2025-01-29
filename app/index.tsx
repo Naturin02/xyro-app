@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     backgroundColor: "rgba(0, 0, 0, 0.4)", // Fondo gris semi-transparente
-    padding: 50,
+    padding: 70,
     borderRadius: 10,
     marginBottom: 1, // Espacio entre el logo y el título
   },
@@ -67,10 +67,10 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: Color.colorDarkslategray,
-    paddingVertical: 10,
-    paddingHorizontal: 40,
+    paddingVertical: 15,  // Ajuste para que el botón sea más alto
+    paddingHorizontal: 60, // Ajusta el tamaño para que se vea adecuado
     borderRadius: 5,
-    width: "50%", // Ajusta el tamaño para que se vea adecuado
+    width: "80%", // Botón más largo, ocupa el 80% del ancho de la pantalla
   },
   buttonText: {
     textAlign: "center",
@@ -81,4 +81,3 @@ const styles = StyleSheet.create({
 });
 
 export default HomeScreen;
-

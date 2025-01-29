@@ -5,7 +5,9 @@ export default function Layout() {
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="login" options={{ title: "Inicio de sesión" }} />
-      <Stack.Screen name="registro" options={{ title: "Registro" }} /> {/* Asegúrate de que está aquí */}
+      <Stack.Screen name="registro" options={{ title: "Registro" }} />
+      <Stack.Screen name="recuperar" options={{ title: "Recuperar Contraseña" }} />
+      <Stack.Screen name="correo" options={{ title: "Revisar correo" }} /> {/* Aquí se agrega correo */}
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
     </Stack>
   );

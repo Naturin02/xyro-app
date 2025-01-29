@@ -1,10 +1,7 @@
-// C:\Users\shiro\OneDrive\Escritorio\Exp\xyro-app\app\Inicio_Sesion\login.tsx
 import React, { useState, useEffect } from "react";
 import { Image, View, Pressable, Text, TextInput } from "react-native";
 import { useRouter } from "expo-router"; // Navegación con Expo Router
 import { loginStyles } from "../Styles/loginStyle"; // Ruta corregida a loginStyle.ts
-
-
 
 const LoginScreen = () => {
   const router = useRouter(); // Expo Router para navegación
@@ -34,12 +31,6 @@ const LoginScreen = () => {
     checkBackend();
   }, []);
 
-
-
-
-
-  
-
   return (
     <View style={loginStyles.container}>
       {/* Encabezado con Logo */}
@@ -67,7 +58,11 @@ const LoginScreen = () => {
         onChangeText={setPassword}
       />
 
-      <Pressable onPress={() => console.log("Olvidaste tu contraseña")} style={loginStyles.forgotPassword}>
+      {/* Enlace de Olvido de Contraseña */}
+      <Pressable
+        onPress={() => router.push("/Inicio_Sesion/Recuperar")} // Redirige a la pantalla de recuperación
+        style={loginStyles.forgotPassword}
+      >
         <Text style={loginStyles.forgotPasswordText}>¿Olvidaste tu contraseña?</Text>
       </Pressable>
 
