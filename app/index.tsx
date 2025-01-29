@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, StyleSheet, Text, View, Pressable } from "react-native";
+import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router"; // Cambio de navegación
 import { Color, FontFamily, FontSize } from "../constants/GlobalStyles";
 
@@ -9,38 +9,54 @@ const HomeScreen = () => {
   return (
     <View style={styles.container}>
       {/* Imagen de fondo */}
-      <Image style={styles.backgroundImage} source={require("../assets/images/bienvenido-xyro.png")} />
+      <Image 
+        style={styles.backgroundImage} 
+        source={require("../assets/images/ImagenP.jpg")} 
+        resizeMode="cover" // La imagen cubre toda la pantalla
+      />
 
-      {/* Logo */}
-      <Image style={styles.logo} source={require("../assets/images/logo-xyro.png")} />
+      {/* Cuadro transparente detrás del logo */}
+      <View style={styles.logoContainer}>
+        <Image style={styles.logo} source={require("../assets/images/logo-xyro.png")} />
+      </View>
 
       {/* Título */}
       <Text style={styles.title}>Bienvenido a Xyro{"\n"}N°1 en México</Text>
 
       {/* Botón "Continuar" */}
-      <Pressable style={styles.button} onPress={() => router.push("/Inicio_Sesion/login")}>
+      <TouchableOpacity 
+        style={styles.button}
+        onPress={() => router.push("/Inicio_Sesion/login")} // Navega a la página de login
+      >
         <Text style={styles.buttonText}>Continuar</Text>
-      </Pressable>
+      </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1, // Esto asegura que el contenedor ocupe todo el espacio disponible
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: Color.colorWhite,
   },
   backgroundImage: {
     position: "absolute",
-    width: "100%",
-    height: "100%",
+    top: 0,
+    left: 0,
+    width: "100%", // Asegura que ocupe todo el ancho
+    height: "100%", // Asegura que ocupe toda la altura
+  },
+  logoContainer: {
+    backgroundColor: "rgba(0, 0, 0, 0.4)", // Fondo gris semi-transparente
+    padding: 50,
+    borderRadius: 10,
+    marginBottom: 1, // Espacio entre el logo y el título
   },
   logo: {
     width: 106,
-    height: 120,
-    marginBottom: 20,
+    height: 110,
   },
   title: {
     textAlign: "center",
@@ -51,9 +67,10 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: Color.colorDarkslategray,
-    paddingVertical: 15,
+    paddingVertical: 10,
     paddingHorizontal: 40,
-    borderRadius: 10,
+    borderRadius: 5,
+    width: "50%", // Ajusta el tamaño para que se vea adecuado
   },
   buttonText: {
     textAlign: "center",
@@ -64,3 +81,4 @@ const styles = StyleSheet.create({
 });
 
 export default HomeScreen;
+

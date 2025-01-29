@@ -4,6 +4,8 @@ import { Image, View, Pressable, Text, TextInput } from "react-native";
 import { useRouter } from "expo-router"; // Navegación con Expo Router
 import { loginStyles } from "../Styles/loginStyle"; // Ruta corregida a loginStyle.ts
 
+
+
 const LoginScreen = () => {
   const router = useRouter(); // Expo Router para navegación
   const [email, setEmail] = useState("");
@@ -13,7 +15,7 @@ const LoginScreen = () => {
     console.log("Intentando conectar con el backend...");
 
     try {
-      const response = await fetch("http://10.2.8.34:5000/");
+      const response = await fetch("http://192.168.137.1:5000/");
 
       // Verifica si la respuesta es exitosa
       if (!response.ok) {
@@ -31,6 +33,12 @@ const LoginScreen = () => {
     console.log("Ejecutando checkBackend()...");
     checkBackend();
   }, []);
+
+
+
+
+
+  
 
   return (
     <View style={loginStyles.container}>

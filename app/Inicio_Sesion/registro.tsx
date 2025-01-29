@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Pressable, Image, Alert } from "react-native";
+import { View, Text, TextInput, Pressable, Image, Alert, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router"; // Expo Router para la navegación
 import { registroStyles } from "../Styles/registroStyle"; // Importación correcta a los estilos
 
@@ -8,42 +8,35 @@ const RegistroScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
-  const [birthdate, setBirthdate] = useState("");
   const [firstName, setFirstName] = useState(""); // Nuevo campo para el primer nombre
   const [lastName, setLastName] = useState(""); // Nuevo campo para el apellido
   const [termsAccepted, setTermsAccepted] = useState(false);
 
   const handleRegister = async () => {
-    if (!email || !password || !username || !birthdate) {
+    // Limpiar los valores y eliminar espacios en blanco al principio y al final
+    const trimmedEmail = email.trim();
+    const trimmedPassword = password.trim();
+    const trimmedUsername = username.trim();
+    const trimmedFirstName = firstName.trim();
+    const trimmedLastName = lastName.trim();
+
+    // Verificar si los campos están vacíos
+    if (!trimmedEmail || !trimmedPassword || !trimmedUsername || !trimmedFirstName || !trimmedLastName) {
       alert("Por favor completa todos los campos.");
       return;
     }
 
-    // Validar y formatear la fecha antes de enviarla al backend
-    const partesFecha = birthdate.split("/");
-    if (partesFecha.length === 3) {
-      const dia = partesFecha[0].padStart(2, "0");
-      const mes = partesFecha[1].padStart(2, "0");
-      const año = partesFecha[2];
-
-      birthdate = `${dia}/${mes}/${año}`;
-    } else {
-      alert("Formato de fecha inválido. Usa DD/MM/YYYY");
-      return;
-    }
-
     try {
-      const response = await fetch("http://10.2.8.34:5000/api/usuarios/registro", {
+      const response = await fetch("http://192.168.137.1:5000/api/usuarios/registro", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          nombre: firstName, // Agregar nombre
-          correo: email,
-          contrasena: password,
-          nombre_usuario: username,
-          fecha_nacimiento: birthdate,
+          nombre: trimmedFirstName, // Agregar nombre
+          correo: trimmedEmail,
+          contrasena: trimmedPassword,
+          nombre_usuario: trimmedUsername,
         }),
       });
 
@@ -112,28 +105,6 @@ const RegistroScreen = () => {
           value={username}
           onChangeText={setUsername}
         />
-        <TextInput
-          style={[registroStyles.input, registroStyles.halfInput]}
-          placeholder="DD/MM/AAAA"
-          placeholderTextColor="#999"
-          value={birthdate}
-          onChangeText={(value) => {
-            // Eliminar cualquier carácter que no sea número o barra
-            let formattedValue = value.replace(/[^0-9\/]/g, "");
-
-            // Si hay un número de 2 dígitos para el día, añadir la barra
-            if (formattedValue.length === 2 && !formattedValue.includes("/")) {
-              formattedValue = `${formattedValue.slice(0, 2)}/`;
-            }
-            // Si hay un número de 2 dígitos para el mes, añadir la barra
-            if (formattedValue.length === 5 && !formattedValue.includes("/")) {
-              formattedValue = `${formattedValue.slice(0, 5)}/`;
-            }
-
-            setBirthdate(formattedValue);
-          }}
-          keyboardType="number-pad"
-        />
       </View>
 
       {/* Checkbox de términos y condiciones */}
@@ -145,13 +116,13 @@ const RegistroScreen = () => {
       </Pressable>
 
       {/* Botón de registro */}
-      <Pressable
+      <TouchableOpacity
         style={[registroStyles.registerButton, !termsAccepted && registroStyles.disabledButton]}
         disabled={!termsAccepted}
         onPress={handleRegister} // Llama al registro y luego navega a la verificación
       >
         <Text style={registroStyles.registerButtonText}>Crear cuenta</Text>
-      </Pressable>
+      </TouchableOpacity>
     </View>
   );
 };
