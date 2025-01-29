@@ -38,7 +38,7 @@ const MarcasScreen = () => {
         </View>
 
         {/* Sección de Ofertas */}
-        <Text style={MarcasStyles.sectionTitle}>🎉 ¡Oferta Top del Día!</Text>
+        <Text style={MarcasStyles.sectionTitle}> ¡Oferta Top del Día!</Text>
         <View style={MarcasStyles.card}>
           <Text style={MarcasStyles.cardTitle}>¡Descuentos en Adidas y Guess!</Text>
           <Pressable style={MarcasStyles.button} onPress={() => alert("Explorar más")}>
