@@ -15,7 +15,7 @@ const MarcasScreen = () => {
         {/* Encabezado */}
         <View style={MarcasStyles.header}>
           <Text style={MarcasStyles.logo}>🛍️ Xyro</Text>
-          <Pressable onPress={() => router.push("/carrito")}>
+          <Pressable onPress={() => router.push("/Carrito/carrito")}>
             <Text style={MarcasStyles.cart}>🛒</Text>
           </Pressable>
         </View>
