@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, Pressable } from "react-native";
 import { useRouter } from "expo-router";
-import { DatosPersonalesStyles } from "../Styles/datosPersonalesStyle";
+import { DatosPersonalesStyles } from "../Styles/DatosPersonalesStyle";
 import { Ionicons } from "@expo/vector-icons";
 
 const DatosPersonalesScreen = () => {
@@ -57,7 +57,7 @@ const DatosPersonalesScreen = () => {
 
       {/* Botón de Continuar */}
       <Pressable style={DatosPersonalesStyles.continueButton} onPress={() => alert("Datos guardados")}> 
-        <Text style={DatosPersonalesStyles.continueButtonText}>Continuar</Text>
+        <Text style={DatosPersonalesStyles.continueButtonText}>Guardar</Text>
       </Pressable>
     </View>
   );

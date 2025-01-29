@@ -45,7 +45,8 @@ const CuentaScreen = () => {
       <Pressable style={CuentaStyles.optionButton} onPress={() => alert("Mis pedidos")}> 
         <Text style={CuentaStyles.optionText}>Mis pedidos</Text>
       </Pressable>
-      <Pressable style={CuentaStyles.optionButton} onPress={() => router.replace("/Herramientas/datosPersonales")}>
+      
+      <Pressable style={CuentaStyles.optionButton} onPress={() => router.push("/Herramientas/datosPersonales")}>
         <Text style={CuentaStyles.optionText}>Mis datos</Text>
       </Pressable>
 
