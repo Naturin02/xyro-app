@@ -1,14 +1,14 @@
-import React from "react";
-import { View, Text, Pressable, ScrollView } from "react-native";
-import { useRouter } from "expo-router"; // Navegación con Expo Router
-import { MarcasStyles } from "../Styles/marcasStyle"; // Importando los estilos desde marcasStyle.ts
-import FooterNavigation from "../Componentes/FooterNavigation"; // Importación del FooterNavigation
-import CategoryNavigation from "../Componentes/CategoryNavigation"; // Importación del CategoryNavigation
-import { API_URL } from "../../backend/utils/config";
+import React, { useState, useEffect } from "react";
+import { View, Text, Pressable, FlatList, ActivityIndicator } from "react-native";
+import { useRouter } from "expo-router";
+import { MarcasStyles } from "../Styles/marcasStyle";
+import FooterNavigation from "../Componentes/FooterNavigation";
+import CategoryNavigation from "../Componentes/CategoryNavigation";
 import axios from "axios";
+import { API_URL } from "../../backend/utils/config";
 
 const MarcasScreen = () => {
-  const router = useRouter(); // Router para navegación
+  const router = useRouter();
   const [tiendas, setTiendas] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -19,12 +19,22 @@ const MarcasScreen = () => {
     setLoading(true);
 
     try {
+      console.log("🔄 Cargando tiendas desde:", `${API_URL}/api/tiendas?page=${page}&limit=10`);
+
       const response = await axios.get(`${API_URL}/api/tiendas?page=${page}&limit=10`);
-      setTiendas(prevTiendas => [...prevTiendas, ...response.data]);
-      setPage(prevPage => prevPage + 1);
-      setHasMore(response.data.length > 0);
+      console.log("📥 Respuesta de la API en marcas.tsx:", response.data);
+
+      const nuevasTiendas = Array.isArray(response.data) ? response.data : [];
+
+      if (nuevasTiendas.length === 0) {
+        console.log("⚠️ No hay más tiendas para cargar.");
+        setHasMore(false);
+      } else {
+        setTiendas(prevTiendas => [...prevTiendas, ...nuevasTiendas]);
+        setPage(prevPage => prevPage + 1);
+      }
     } catch (error) {
-      console.error(error);
+      console.error("❌ Error al cargar tiendas:", error);
     } finally {
       setLoading(false);
     }
@@ -39,18 +49,23 @@ const MarcasScreen = () => {
     return <ActivityIndicator size="large" color="#0000ff" />;
   };
 
-  const renderTienda = ({ item }) => (
-    <View style={MarcasStyles.tiendaContainer}>
-      <Text style={MarcasStyles.tiendaNombre}>{item.nombre_tienda}</Text>
-      <Text style={MarcasStyles.tiendaHorarios}>{item.horarios}</Text>
-      <Text style={MarcasStyles.tiendaDireccion}>{item.direccion}</Text>
-      <Text style={MarcasStyles.tiendaDescripcion}>{item.descripcion}</Text>
-    </View>
-  );
+  const renderTienda = ({ item, index }) => {
+    return (
+      <Pressable 
+        style={MarcasStyles.tiendaContainer} 
+        onPress={() => router.push({ pathname: "../Herramientas/catalogo", params: { tienda: item.nombre_tienda } })}
+
+>
+        <Text style={MarcasStyles.tiendaNombre}>🏬 {item.nombre_tienda}</Text>
+        <Text style={MarcasStyles.tiendaHorarios}>🕒 {item.horarios}</Text>
+        <Text style={MarcasStyles.tiendaDireccion}>📍 {item.direccion}</Text>
+        <Text style={MarcasStyles.tiendaDescripcion}>{item.descripcion}</Text>
+      </Pressable>
+    );
+  };
 
   return (
     <View style={MarcasStyles.container}>
-      {/* Encabezado */}
       <View style={MarcasStyles.header}>
         <Text style={MarcasStyles.logo}>🛍️ Xyro</Text>
         <Pressable onPress={() => router.push("/Carrito/carrito")}>
@@ -58,43 +73,24 @@ const MarcasScreen = () => {
         </Pressable>
       </View>
 
-      {/* Categorías */}
-      <CategoryNavigation /> {/* Aquí se coloca el componente CategoryNavigation */}
+      <CategoryNavigation />
 
-      {/* Banner de promoción */}
-      <View style={MarcasStyles.banner}>
-        <Text style={MarcasStyles.bannerText}>Envío gratuito por compras mayores a $1,000</Text>
-      </View>
+      {/* Mensaje si no hay datos */}
+      {tiendas.length === 0 && !loading ? (
+        <Text style={{ textAlign: "center", marginTop: 20, fontSize: 16, color: "red" }}>
+          ❌ No hay tiendas disponibles
+        </Text>
+      ) : (
+        <FlatList
+          data={tiendas}
+          keyExtractor={(item, index) => index.toString()} // ✅ Evita problemas con claves
+          renderItem={renderTienda}
+          onEndReached={loadTiendas}
+          onEndReachedThreshold={0.2}
+          ListFooterComponent={renderFooter}
+        />
+      )}
 
-      {/* Sección de descuentos */}
-      <Text style={MarcasStyles.sectionTitle}>🔹 Destacado</Text>
-      <View style={MarcasStyles.card}>
-        <Text style={MarcasStyles.cardTitle}>Obten hasta 82% de descuento</Text>
-        <Pressable style={MarcasStyles.button} onPress={() => alert("Ir a ofertas")}>
-          <Text style={MarcasStyles.buttonText}>Ver ofertas</Text>
-        </Pressable>
-      </View>
-
-      {/* Sección de Ofertas */}
-      <Text style={MarcasStyles.sectionTitle}> ¡Oferta Top del Día!</Text>
-      <View style={MarcasStyles.card}>
-        <Text style={MarcasStyles.cardTitle}>¡Descuentos en Adidas y Guess!</Text>
-        <Pressable style={MarcasStyles.button} onPress={() => alert("Explorar más")}>
-          <Text style={MarcasStyles.buttonText}>Explorar</Text>
-        </Pressable>
-      </View>
-
-      {/* Lista de Tiendas con Scroll Infinito */}
-      <FlatList
-        data={tiendas}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={renderTienda}
-        onEndReached={loadTiendas}
-        onEndReachedThreshold={0.5}
-        ListFooterComponent={renderFooter}
-      />
-
-      {/* Footer de navegación */}
       <FooterNavigation />
     </View>
   );
