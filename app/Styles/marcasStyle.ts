@@ -1,4 +1,3 @@
-// C:\Users\shiro\OneDrive\Escritorio\Exp\xyro-app\app\Styles\marcasStyle.ts
 import { StyleSheet } from "react-native";
 import { Color, FontFamily, FontSize } from "../../constants/GlobalStyles"; // Asegúrate de que la ruta sea correcta
 
@@ -75,6 +74,36 @@ export const MarcasStyles = StyleSheet.create({
   buttonText: {
     color: Color.colorWhite,
     fontSize: FontSize.size_smi,
+  },
+  // Estilos adicionales para la lista de tiendas
+  tiendaContainer: {
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: Color.colorGainsboro_200,
+  },
+  tiendaNombre: {
+    fontSize: FontSize.size_sm,
+    fontFamily: FontFamily.juaRegular,
+    color: Color.colorBlack,
+    fontWeight: "bold",
+  },
+  tiendaHorarios: {
+    fontSize: FontSize.size_smi,
+    fontFamily: FontFamily.juaRegular,
+    color: Color.colorDarkslategray,
+    marginTop: 4,
+  },
+  tiendaDireccion: {
+    fontSize: FontSize.size_smi,
+    fontFamily: FontFamily.juaRegular,
+    color: Color.colorDarkslategray,
+    marginTop: 4,
+  },
+  tiendaDescripcion: {
+    fontSize: FontSize.size_smi,
+    fontFamily: FontFamily.juaRegular,
+    color: Color.colorDarkslategray,
+    marginTop: 4,
   },
 });
 
