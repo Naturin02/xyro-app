@@ -31,28 +31,26 @@ const LoginScreen = () => {
   // ✅ Función para manejar el inicio de sesión
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert("Error", "Todos los campos son obligatorios");
+      Alert.alert("Error", "Correo y contraseña son obligatorios");
       return;
     }
-
+  
     try {
       const response = await fetch(`${API_URL}/api/usuarios/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ correo: email, contrasena: password })
       });
-
+  
       const data = await response.json();
-      console.log("📌 Respuesta del servidor:", data);
-
+  
       if (response.ok) {
-        Alert.alert("Inicio de sesión exitoso", `Bienvenido ${data.usuario.nombre}`);
-        router.replace("/Herramientas/marcas"); // ✅ Redirigir a la pantalla principal
+        Alert.alert("Bienvenido", `Hola ${data.usuario.nombre}`);
+        router.replace("/Herramientas/marcas"); // Redirigir a la pantalla principal
       } else {
-        Alert.alert("Error", data.error || "Correo o contraseña incorrectos");
+        Alert.alert("Error", data.error || "Credenciales incorrectas");
       }
     } catch (error) {
-      console.error("❌ Error en el inicio de sesión:", error);
       Alert.alert("Error", "Hubo un problema con el inicio de sesión");
     }
   };
