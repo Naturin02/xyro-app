@@ -5,12 +5,15 @@ export const ProductStyles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    padding: 10,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 16,
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    backgroundColor: "#bg5190",
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
   },

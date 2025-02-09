@@ -4,7 +4,7 @@ import { CartProvider } from "../app/context/CartContext"; // Importamos el cont
 export default function Layout() {
   return (
     <CartProvider>
-      <Stack />
+      <Stack screenOptions={{ headerShown: false }} />
     </CartProvider>
   );
 }

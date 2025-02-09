@@ -16,6 +16,7 @@ const ProductGrid = () => {
   const router = useRouter();
   const { tienda } = useLocalSearchParams();
   const { addToCart } = useCart();
+  const { cart } = useCart();
 
   useEffect(() => {
     if (!tienda) return;
@@ -67,6 +68,21 @@ const ProductGrid = () => {
 
   return (
     <View style={ProductStyles.container}>
+      <View style={ProductStyles.header}>
+        <Pressable onPress={() => router.back()}>
+          <Ionicons name="arrow-back" size={28} color="black" />
+        </Pressable>
+        <Text style={ProductStyles.headerTitle}>{tienda}</Text>
+        <Pressable onPress={() => router.push("/Carrito/carrito")}>
+          <Ionicons name="cart-outline" size={28} color="black" />
+          {cart.length > 0 && (
+            <View style={ProductStyles.cartBadge}>
+              <Text style={ProductStyles.cartBadgeText}>{cart.length}</Text>
+            </View>
+          )}
+        </Pressable>
+        </View>
+
       <FlatList data={products} renderItem={renderItem} keyExtractor={(item, index) => index.toString()} numColumns={2} />
 
       {/* Modal para seleccionar cantidad */}
