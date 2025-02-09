@@ -1,64 +1,83 @@
 import { StyleSheet } from "react-native";
-import { Color, FontFamily, FontSize } from "../../constants/GlobalStyles";
 
 export const CarritoStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Color.colorWhite,
+    backgroundColor: "#F5F5F5",
     padding: 20,
-    alignItems: "center",
   },
   header: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    width: "100%",
     marginBottom: 20,
   },
   headerTitle: {
-    fontSize: FontSize.size_17xl,
-    fontFamily: FontFamily.juaRegular,
+    fontSize: 22,
     fontWeight: "bold",
   },
-  subText: {
-    fontSize: FontSize.size_mini,
-    fontFamily: FontFamily.juaRegular,
-    color: "#666",
+  emptyCartText: {
+    fontSize: 18,
+    textAlign: "center",
+    color: "#555",
+    marginTop: 50,
+  },
+  productContainer: {
+    backgroundColor: "#fff",
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  productName: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  productPrice: {
+    fontSize: 16,
+    color: "#333",
     marginBottom: 10,
   },
-  inputContainer: {
+  quantityContainer: {
     flexDirection: "row",
-    width: "100%",
-    marginBottom: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 15,
+    marginBottom: 10,
   },
-  input: {
-    flex: 1,
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderWidth: 1,
-    borderColor: "#ccc",
+  productQuantity: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  deleteButton: {
+    backgroundColor: "red",
+    paddingVertical: 8,
     borderRadius: 8,
-    fontSize: FontSize.size_mini,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
-  emptyCartText: {
-    fontSize: FontSize.size_lg,
-    fontFamily: FontFamily.juaRegular,
-    textAlign: "center",
-    marginTop: 40,
-    color: "#444",
+  deleteButtonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+    marginLeft: 8,
   },
-  buyButton: {
-    marginTop: 20,
-    paddingVertical: 15,
-    width: "80%",
+  checkoutButton: {
     backgroundColor: "#000",
+    paddingVertical: 15,
     borderRadius: 10,
     alignItems: "center",
+    marginTop: 20,
   },
-  buyButtonText: {
-    fontSize: FontSize.size_mini,
-    fontFamily: FontFamily.juaRegular,
+  checkoutButtonText: {
     color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });
 
