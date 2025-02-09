@@ -3,15 +3,17 @@ import { View, Text, FlatList, Pressable } from "react-native";
 import { useCart } from "../context/CartContext";
 import { CarritoStyles } from "../Styles/CarritoStyle";
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 
 const CarritoScreen = () => {
   const { cart, updateQuantity, removeFromCart } = useCart();
+  const router = useRouter();
 
   return (
     <View style={CarritoStyles.container}>
       {/* Encabezado */}
       <View style={CarritoStyles.header}>
-        <Pressable onPress={() => alert("Regresar")}>
+      <Pressable onPress={() => router.back()}>
           <Ionicons name="arrow-back" size={28} color="#333" />
         </Pressable>
         <Text style={CarritoStyles.headerTitle}>Carrito de Compras</Text>
