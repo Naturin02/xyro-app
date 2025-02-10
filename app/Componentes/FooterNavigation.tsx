@@ -12,9 +12,7 @@ const FooterNavigation = () => {
       <Pressable style={FooterNavigationStyle.footerItem} onPress={() => router.push("/Herramientas/marcas")}>
         <Text style={FooterNavigationStyle.footerText}>🏷️ Tienda</Text>
       </Pressable>
-      <Pressable style={FooterNavigationStyle.footerItem} onPress={() => alert("/categorías")}>
-        <Text style={FooterNavigationStyle.footerText}>📂 Categorías</Text>
-      </Pressable>
+     
       <Pressable style={FooterNavigationStyle.footerItem} onPress={() => router.push("/Herramientas/cuenta")}>
         <Text style={FooterNavigationStyle.footerText}>👤 Cuenta</Text>
       </Pressable>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, Pressable } from "react-native";
 import { useRouter } from "expo-router";
-import { DatosPersonalesStyles } from "../Styles/DatosPersonalesStyle";
+import { DatosPersonalesStyles } from "../Styles/datosPersonalesStyle"; // Asegúrate de la ruta correcta
 import { Ionicons } from "@expo/vector-icons";
 
 const DatosPersonalesScreen = () => {
@@ -16,9 +16,6 @@ const DatosPersonalesScreen = () => {
           <Ionicons name="arrow-back" size={28} color="#333" />
         </Pressable>
         <Text style={DatosPersonalesStyles.headerTitle}>Datos Personales</Text>
-        <Pressable onPress={() => alert("Carrito")}> 
-          <Ionicons name="cart-outline" size={28} color="#333" />
-        </Pressable>
       </View>
 
       {/* Campos de entrada */}
@@ -56,7 +53,7 @@ const DatosPersonalesScreen = () => {
       </View>
 
       {/* Botón de Continuar */}
-      <Pressable style={DatosPersonalesStyles.continueButton} onPress={() => alert("Datos guardados")}> 
+      <Pressable style={DatosPersonalesStyles.continueButton} onPress={() => alert("Datos guardados")}>
         <Text style={DatosPersonalesStyles.continueButtonText}>Guardar</Text>
       </Pressable>
     </View>
