@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { Color, FontFamily, FontSize } from "../../constants/GlobalStyles";
+import { Color, FontFamily, FontSize } from "../../constants/GlobalStyles"; // Asegúrate de que la ruta sea correcta
 
 export const DatosPersonalesStyles = StyleSheet.create({
   container: {
@@ -10,13 +10,14 @@ export const DatosPersonalesStyles = StyleSheet.create({
   header: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "center", // Centrado del contenido
     marginBottom: 20,
   },
   headerTitle: {
     fontSize: FontSize.size_17xl,
     fontFamily: FontFamily.juaRegular,
     fontWeight: "bold",
+    textAlign: "center", // Asegura que el texto esté centrado
   },
   form: {
     marginBottom: 20,

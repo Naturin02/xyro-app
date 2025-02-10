@@ -31,9 +31,7 @@ const CuentaScreen = () => {
           <Ionicons name="arrow-back" size={28} color="#333" />
         </Pressable>
         <Text style={CuentaStyles.headerTitle}>Mi cuenta</Text>
-        <Pressable onPress={() => alert("Carrito")}> 
-          <Ionicons name="cart-outline" size={28} color="#333" />
-        </Pressable>
+      
       </View>
 
       {/* Mensaje de bienvenida */}
