@@ -1,10 +1,10 @@
 import { Stack } from "expo-router";
-import { CartProvider } from "../app/context/CartContext"; // Importamos el contexto
+//import { CartProvider } from "../context/CartContext"; ✅ Asegúrate de que la ruta es correcta
 
-export default function Layout() {
-  return (
-    <CartProvider>
-      <Stack screenOptions={{ headerShown: false }} />
-    </CartProvider>
-  );
-}
+//export default function Layout() {
+  //return (///
+   // <CartProvider>//
+    //  <Stack />//
+   // </CartProvider>//
+ // );//
+//} //

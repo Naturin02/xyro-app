@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { Color, FontFamily, FontSize } from "../../constants/GlobalStyles"; // Asegúrate de que la ruta sea correcta
+import { Color, FontFamily, FontSize } from "../../constants/GlobalStyles";
 
 export const CuentaStyles = StyleSheet.create({
   container: {
@@ -10,14 +10,13 @@ export const CuentaStyles = StyleSheet.create({
   header: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center", // Cambié esta línea para centrar el contenido del encabezado
+    justifyContent: "space-between",
     marginBottom: 20,
   },
   headerTitle: {
     fontSize: FontSize.size_17xl,
     fontFamily: FontFamily.juaRegular,
     fontWeight: "bold",
-    textAlign: "center", // Asegura que el texto esté centrado
   },
   userContainer: {
     backgroundColor: Color.colorWhite,

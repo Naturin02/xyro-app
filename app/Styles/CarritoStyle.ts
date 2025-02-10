@@ -1,83 +1,64 @@
 import { StyleSheet } from "react-native";
+import { Color, FontFamily, FontSize } from "../../constants/GlobalStyles";
 
 export const CarritoStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F5F5F5",
+    backgroundColor: Color.colorWhite,
     padding: 20,
+    alignItems: "center",
   },
   header: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    width: "100%",
     marginBottom: 20,
   },
   headerTitle: {
-    fontSize: 22,
+    fontSize: FontSize.size_17xl,
+    fontFamily: FontFamily.juaRegular,
     fontWeight: "bold",
+  },
+  subText: {
+    fontSize: FontSize.size_mini,
+    fontFamily: FontFamily.juaRegular,
+    color: "#666",
+    marginBottom: 10,
+  },
+  inputContainer: {
+    flexDirection: "row",
+    width: "100%",
+    marginBottom: 20,
+  },
+  input: {
+    flex: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    fontSize: FontSize.size_mini,
   },
   emptyCartText: {
-    fontSize: 18,
+    fontSize: FontSize.size_lg,
+    fontFamily: FontFamily.juaRegular,
     textAlign: "center",
-    color: "#555",
-    marginTop: 50,
+    marginTop: 40,
+    color: "#444",
   },
-  productContainer: {
-    backgroundColor: "#fff",
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 3,
-  },
-  productName: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  productPrice: {
-    fontSize: 16,
-    color: "#333",
-    marginBottom: 10,
-  },
-  quantityContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 15,
-    marginBottom: 10,
-  },
-  productQuantity: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  deleteButton: {
-    backgroundColor: "red",
-    paddingVertical: 8,
-    borderRadius: 8,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  deleteButtonText: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "bold",
-    marginLeft: 8,
-  },
-  checkoutButton: {
-    backgroundColor: "#000",
-    paddingVertical: 15,
-    borderRadius: 10,
-    alignItems: "center",
+  buyButton: {
     marginTop: 20,
+    paddingVertical: 15,
+    width: "80%",
+    backgroundColor: "#000",
+    borderRadius: 10,
+    alignItems: "center",
   },
-  checkoutButtonText: {
+  buyButtonText: {
+    fontSize: FontSize.size_mini,
+    fontFamily: FontFamily.juaRegular,
     color: "#fff",
-    fontSize: 18,
-    fontWeight: "bold",
   },
 });
 
