@@ -23,6 +23,7 @@ export const FontSize = {
   size_6xl: 25,
   size_smi: 13,
   size_mini: 15,
+  size_md: 18, // Añadido
 };
 /* Colors */
 export const Color = {

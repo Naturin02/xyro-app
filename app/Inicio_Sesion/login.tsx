@@ -28,31 +28,13 @@ const LoginScreen = () => {
     checkBackend();
   }, []);
 
-  // ✅ Función para manejar el inicio de sesión
+  // ✅ Función para manejar el inicio de sesión (simulado)
   const handleLogin = async () => {
-    if (!email || !password) {
-      Alert.alert("Error", "Correo y contraseña son obligatorios");
-      return;
-    }
-  
-    try {
-      const response = await fetch(`${API_URL}/api/usuarios/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ correo: email, contrasena: password })
-      });
-  
-      const data = await response.json();
-  
-      if (response.ok) {
-        Alert.alert("Bienvenido", `Hola ${data.usuario.nombre}`);
-        router.replace("/Herramientas/marcas"); // Redirigir a la pantalla principal
-      } else {
-        Alert.alert("Error", data.error || "Credenciales incorrectas");
-      }
-    } catch (error) {
-      Alert.alert("Error", "Hubo un problema con el inicio de sesión");
-    }
+    // Aquí simulamos que siempre el login es exitoso
+    Alert.alert("Inicio de sesión exitoso", `Bienvenido`);
+
+    // Redirigir a la pantalla principal sin necesidad de hacer login real
+    router.replace("/Herramientas/marcas"); // ✅ Redirigir a la pantalla principal
   };
 
   return (
@@ -88,7 +70,7 @@ const LoginScreen = () => {
       <Text style={loginStyles.forgotPasswordText}>¿Olvidaste tu contraseña?</Text>
       </Pressable>
 
-      {/* ✅ Botón de inicio de sesión actualizado */}
+      {/* ✅ Botón de inicio de sesión simulado */}
       <Pressable style={loginStyles.loginButton} onPress={handleLogin}>
         <Text style={loginStyles.loginButtonText}>Iniciar sesión</Text>
       </Pressable>
@@ -102,7 +84,8 @@ const LoginScreen = () => {
 
       {/* Botones de redes sociales */}
       <Pressable style={loginStyles.socialButton} onPress={() => console.log("Continuar con Google")}>
-        <Image style={loginStyles.socialIcon} source={require("../../assets/images/google-icon.png")} />
+        {/* Actualizado con nueva imagen de Google */}
+        <Image style={loginStyles.socialIcon} source={require("../../assets/images/google.png")} />
         <Text style={loginStyles.socialButtonText}>Continuar con Google</Text>
       </Pressable>
 
@@ -112,7 +95,8 @@ const LoginScreen = () => {
       </Pressable>
 
       <Pressable style={loginStyles.socialButton} onPress={() => console.log("Continuar con Facebook")}>
-        <Image style={loginStyles.socialIcon} source={require("../../assets/images/facebook-icon.png")} />
+        {/* Actualizado con nueva imagen de Facebook */}
+        <Image style={loginStyles.socialIcon} source={require("../../assets/images/facebook.png")} />
         <Text style={loginStyles.socialButtonText}>Continuar con Facebook</Text>
       </Pressable>
     </View>

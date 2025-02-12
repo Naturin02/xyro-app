@@ -13,25 +13,25 @@ const MarcasScreen = () => {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
+  // Cargar tiendas según el filtro de categoría y búsqueda
   const loadTiendas = async () => {
     if (loading || !hasMore) return;
     setLoading(true);
 
     try {
-      console.log("🔄 Cargando tiendas desde:", `${API_URL}/api/tiendas?page=${page}&limit=10`);
-
-      const response = await axios.get(`${API_URL}/api/tiendas?page=${page}&limit=10`);
-      console.log("📥 Respuesta de la API en marcas.tsx:", response.data);
+      const url = `${API_URL}/api/tiendas?page=${page}&limit=10`;
+      const response = await axios.get(url);
 
       const nuevasTiendas = Array.isArray(response.data) ? response.data : [];
 
       if (nuevasTiendas.length === 0) {
-        console.log("⚠️ No hay más tiendas para cargar.");
         setHasMore(false);
       } else {
-        setTiendas(prevTiendas => [...prevTiendas, ...nuevasTiendas]);
-        setPage(prevPage => prevPage + 1);
+        setTiendas((prevTiendas) => [...prevTiendas, ...nuevasTiendas]);
+        setPage((prevPage) => prevPage + 1);
       }
     } catch (error) {
       console.error("❌ Error al cargar tiendas:", error);
@@ -42,20 +42,25 @@ const MarcasScreen = () => {
 
   useEffect(() => {
     loadTiendas();
-  }, []);
+  }, [selectedCategory, searchQuery]);
+
+  // Filtro de tiendas basado en la categoría seleccionada y la búsqueda
+  const filteredTiendas = tiendas.filter((tienda) => {
+    const matchesCategory = selectedCategory
+      ? tienda.categoria.toLowerCase().includes(selectedCategory.toLowerCase())
+      : true;
+    const matchesSearch = tienda.nombre_tienda.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   const renderFooter = () => {
     if (!loading) return null;
     return <ActivityIndicator size="large" color="#0000ff" />;
   };
 
-  const renderTienda = ({ item, index }) => {
+  const renderTienda = ({ item }) => {
     return (
-      <Pressable 
-        style={MarcasStyles.tiendaContainer} 
-        onPress={() => router.push({ pathname: "../Herramientas/catalogo", params: { tienda: item.nombre_tienda } })}
-
->
+      <Pressable style={MarcasStyles.tiendaContainer} onPress={() => router.push({ pathname: "../Herramientas/catalogo", params: { tienda: item.nombre_tienda } })}>
         <Text style={MarcasStyles.tiendaNombre}>🏬 {item.nombre_tienda}</Text>
         <Text style={MarcasStyles.tiendaHorarios}>🕒 {item.horarios}</Text>
         <Text style={MarcasStyles.tiendaDireccion}>📍 {item.direccion}</Text>
@@ -73,17 +78,17 @@ const MarcasScreen = () => {
         </Pressable>
       </View>
 
-      <CategoryNavigation />
+      <CategoryNavigation onCategorySelect={setSelectedCategory} onSearchQueryChange={setSearchQuery} />
 
       {/* Mensaje si no hay datos */}
-      {tiendas.length === 0 && !loading ? (
+      {filteredTiendas.length === 0 && !loading ? (
         <Text style={{ textAlign: "center", marginTop: 20, fontSize: 16, color: "red" }}>
           ❌ No hay tiendas disponibles
         </Text>
       ) : (
         <FlatList
-          data={tiendas}
-          keyExtractor={(item, index) => index.toString()} // ✅ Evita problemas con claves
+          data={filteredTiendas}
+          keyExtractor={(item, index) => index.toString()}
           renderItem={renderTienda}
           onEndReached={loadTiendas}
           onEndReachedThreshold={0.2}
@@ -97,3 +102,14 @@ const MarcasScreen = () => {
 };
 
 export default MarcasScreen;
+
+
+
+
+
+
+
+
+
+
+
