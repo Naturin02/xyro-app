@@ -14,14 +14,15 @@ export const CuentaStyles = StyleSheet.create({
     marginBottom: 20,
   },
   headerTitle: {
-    fontSize: FontSize.size_17xl,
+    fontSize: FontSize.size_xl, // Título más pequeño
     fontFamily: FontFamily.juaRegular,
     fontWeight: "bold",
+    color: "#333", // Título más visible
   },
   userContainer: {
     backgroundColor: Color.colorWhite,
     alignItems: "center",
-    fontSize: FontSize.size_6xl,
+    fontSize: FontSize.size_xl,
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 5,
@@ -30,63 +31,64 @@ export const CuentaStyles = StyleSheet.create({
   userText: {
     fontSize: FontSize.size_mini,
     fontFamily: FontFamily.juaRegular,
+    color: "#333", // Texto más visible
   },
   optionButton: {
     width: "100%",
-    paddingVertical: 15,
+    paddingVertical: 12, // Botón más pequeño
     backgroundColor: Color.colorSeagreen,
-    borderRadius: 10,
+    borderRadius: 8, // Bordes más redondeados
     alignItems: "center",
-    marginVertical: 5,
+    marginVertical: 8,
     fontWeight: "bold",
   },
   logoutButton: {
     width: "100%",
-    paddingVertical: 15,
+    paddingVertical: 12,
     backgroundColor: Color.colorDarkslategray,
-    borderRadius: 10,
+    borderRadius: 8,
     alignItems: "center",
-    marginTop: 20,
+    marginTop: 15,
   },
   deleteButton: {
     width: "100%",
-    paddingVertical: 15,
+    paddingVertical: 12,
     borderWidth: 1,
     borderColor: "red",
-    borderRadius: 10,
+    borderRadius: 8,
     alignItems: "center",
-    marginTop: 10,
+    marginTop: 15,
   },
   deleteButtonText: {
     fontSize: FontSize.size_mini,
     fontFamily: FontFamily.juaRegular,
     color: "red",
   },
-  buttonText: {
+  optionText: {
     fontSize: FontSize.size_mini,
     fontFamily: FontFamily.juaRegular,
     color: Color.colorWhite,
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)", 
+    backgroundColor: "rgba(0,0,0,0.5)", // Fondo semi-transparente
     justifyContent: "center",
     alignItems: "center",
   },
   modalContainer: {
     backgroundColor: "#fff",
-    width: "85%",
+    width: "80%", // Modal más estrecho
     padding: 20,
     borderRadius: 10,
     alignItems: "center",
   },
   modalTitle: {
-    fontSize: FontSize.size_5xl,
+    fontSize: FontSize.size_lg,
     fontWeight: "bold",
-    marginBottom: 10,
+    marginBottom: 15,
   },
   modalText: {
-    fontSize: FontSize.size_mini,
+    fontSize: FontSize.size_sm, // Texto más pequeño
     marginBottom: 15,
     textAlign: "center",
   },
@@ -96,7 +98,7 @@ export const CuentaStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 8,
-    paddingHorizontal: 10,
+    paddingHorizontal: 12,
     marginBottom: 15,
   },
   modalButtons: {
@@ -129,3 +131,5 @@ export const CuentaStyles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
+
+export default CuentaStyles;

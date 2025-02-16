@@ -25,7 +25,7 @@ export const FooterNavigationStyle = StyleSheet.create({
     color: Color.colorBlack,
   },
   activeButton: {
-    backgroundColor: Color.colorDarkslategray, // Fondo oscuro cuando está activo
+    backgroundColor: "#d3d3d3", // Fondo gris claro cuando está activo
     borderRadius: 20,
     paddingHorizontal: 15,
     paddingVertical: 10,

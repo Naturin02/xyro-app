@@ -3,20 +3,20 @@ import { Color, FontFamily, FontSize } from "../../constants/GlobalStyles"; // A
 
 export const CategoryNavigationStyles = StyleSheet.create({
   container: {
-    flex: 1,
-    padding: 16,
+    padding: 10, // Reducir el padding para hacer todo más compacto
     backgroundColor: Color.colorWhite,
   },
   searchContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 15,
+    marginBottom: 12, // Reducir el margen inferior
+    alignItems: "center",
   },
   searchInput: {
     backgroundColor: "#f0f0f0",
-    borderRadius: 25,
-    paddingHorizontal: 15,
-    paddingVertical: 10,
+    borderRadius: 20,  // Border más suave para los inputs
+    paddingHorizontal: 8, // Reducir padding horizontal
+    paddingVertical: 5,  // Reducir padding vertical
     fontSize: FontSize.size_sm,
     fontFamily: FontFamily.juaRegular,
     color: Color.colorBlack,
@@ -24,73 +24,67 @@ export const CategoryNavigationStyles = StyleSheet.create({
     borderColor: "#ddd",
     flex: 1,
   },
-  filterButton: {
-    backgroundColor: "#333",
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 25,
+  categoriesContainer: {
+    marginTop: 10,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "flex-start",
+    marginBottom: 15,  // Reducir el margen inferior
+  },
+  categoryButton: {
+    backgroundColor: "#f0f0f0",  // Fondo más claro para categorías
+    borderRadius: 15,  // Reducción del borderRadius para hacerlo más compacto
+    paddingHorizontal: 8,  // Reducir padding
+    paddingVertical: 5,    // Reducir padding
+    margin: 4,             // Reducir el espacio entre botones
     justifyContent: "center",
     alignItems: "center",
-    marginLeft: 10,
+    minWidth: 55,          // Ajuste de tamaño mínimo
+    maxWidth: 90,         // Ajuste de tamaño máximo
+    elevation: 2,          // Sombra ligera
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
-  filterButtonText: {
-    color: "#fff",
-    fontSize: FontSize.size_sm,
+  categoryButtonActive: {
+    backgroundColor: Color.colorBlack,  // Fondo oscuro para categorías seleccionadas
+    elevation: 3, // Sombra más prominente al ser seleccionada
   },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    padding: 20,
-    backgroundColor: "white",
-  },
-  modalTitle: {
-    fontSize: FontSize.size_md,
-    fontFamily: FontFamily.juaRegular,
-    marginBottom: 20,
-    textAlign: "center",
-  },
-  modalOption: {
-    padding: 15,
-    marginVertical: 5,
-    borderRadius: 25,
-    backgroundColor: "#f0f0f0",
-    alignItems: "center",
-  },
-  modalOptionActive: {
-    backgroundColor: Color.colorBlack,
-  },
-  modalOptionText: {
-    fontSize: FontSize.size_sm,
-    fontFamily: FontFamily.juaRegular,
+  categoryButtonText: {
+    fontSize: FontSize.size_xs, // Texto más pequeño
     color: Color.colorBlack,
+    fontFamily: FontFamily.juaRegular,
   },
-  modalOptionTextActive: {
-    color: "#fff",
+  categoryButtonTextActive: {
+    color: "#fff", // Blanco para las categorías seleccionadas
   },
-  clearCategoryButton: {
-    backgroundColor: "#ff4d4d",
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    borderRadius: 25,
-    marginTop: 15,
+  subCategoryButton: {
+    backgroundColor: "#e0e0e0", // Fondo más claro para subcategorías
+    borderRadius: 15,            // Reducción del borderRadius
+    paddingHorizontal: 7,        // Reducir padding horizontal
+    paddingVertical: 4,          // Reducir padding vertical
+    margin: 4,                   // Reducir el espacio entre botones
+    justifyContent: "center",
     alignItems: "center",
+    minWidth: 50,                // Ajuste de tamaño mínimo
+    maxWidth: 90,               // Ajuste de tamaño máximo
+    elevation: 2,                // Sombra ligera
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
-  clearCategoryText: {
-    color: "#fff",
-    fontSize: FontSize.size_sm,
+  subCategoryButtonActive: {
+    backgroundColor: Color.colorCornflowerblue_100,  // Fondo azul para subcategorías seleccionadas
+    elevation: 3,
   },
-  closeButton: {
-    backgroundColor: "#ff4d4d",
-    paddingVertical: 10,
-    borderRadius: 25,
-    alignItems: "center",
-    marginTop: 20,
+  subCategoryButtonText: {
+    fontSize: FontSize.size_xs, // Texto más pequeño
+    color: Color.colorBlack,
+    fontFamily: FontFamily.juaRegular,
   },
-  closeButtonText: {
-    color: "#fff",
-    fontSize: FontSize.size_sm,
+  subCategoryButtonTextActive: {
+    color: "#fff", // Blanco para las subcategorías seleccionadas
   },
 });
-
-
-export default CategoryNavigationStyles;

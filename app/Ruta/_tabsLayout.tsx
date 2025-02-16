@@ -8,6 +8,7 @@ export default function Layout() {
       <Stack.Screen name="registro" options={{ title: "Registro" }} />
       <Stack.Screen name="recuperar" options={{ title: "Recuperar Contraseña" }} />
       <Stack.Screen name="correo" options={{ title: "Revisar correo" }} /> {/* Aquí se agrega correo */}
+      <Stack.Screen name="favoritos" options={{ title: "Favoritos" }} /> {/* Ruta para la pantalla de favoritos */}
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
     </Stack>
   );

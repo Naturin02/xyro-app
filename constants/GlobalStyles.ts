@@ -12,6 +12,7 @@ export const FontFamily = {
   juaRegular: "Jua-Regular",
   spartan: "Spartan",
 };
+
 /* font sizes */
 export const FontSize = {
   size_xs: 12,
@@ -24,7 +25,9 @@ export const FontSize = {
   size_smi: 13,
   size_mini: 15,
   size_md: 18, // Añadido
+  size_lg: 22, // Nuevo tamaño de fuente
 };
+
 /* Colors */
 export const Color = {
   colorWhite: "#fff",
@@ -46,6 +49,7 @@ export const Color = {
   miscellaneousButtonTintedFill: "rgba(0, 122, 255, 0.15)",
   colorDarkslategray: "#3b3a3a",
 };
+
 /* border radiuses */
 export const Border = {
   br_9xs: 4,

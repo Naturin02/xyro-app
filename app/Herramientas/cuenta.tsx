@@ -31,7 +31,7 @@ const CuentaScreen = () => {
           <Ionicons name="arrow-back" size={28} color="#333" />
         </Pressable>
         <Text style={CuentaStyles.headerTitle}>Mi cuenta</Text>
-        <Pressable onPress={() => alert("Carrito")}> 
+        <Pressable onPress={() => alert("Carrito")}>
           <Ionicons name="cart-outline" size={28} color="#333" />
         </Pressable>
       </View>
@@ -42,14 +42,13 @@ const CuentaScreen = () => {
       </View>
 
       {/* Opciones de cuenta */}
-      <Pressable style={CuentaStyles.optionButton} onPress={() => alert("Mis pedidos")}> 
+      <Pressable style={CuentaStyles.optionButton} onPress={() => alert("Mis pedidos")}>
         <Text style={CuentaStyles.optionText}>Mis pedidos</Text>
       </Pressable>
       
       <Pressable style={CuentaStyles.optionButton} onPress={() => router.push("/Herramientas/datosPersonales")}>
         <Text style={CuentaStyles.optionText}>Mis datos</Text>
       </Pressable>
-
 
       <Pressable style={CuentaStyles.optionButton} onPress={() => alert("Devoluciones")}> 
         <Text style={CuentaStyles.optionText}>Devoluciones</Text>

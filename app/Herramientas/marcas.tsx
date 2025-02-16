@@ -1,56 +1,47 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Pressable, FlatList, ActivityIndicator } from "react-native";
+import { View, Text, FlatList, Pressable, ActivityIndicator, KeyboardAvoidingView, Platform } from "react-native";
 import { useRouter } from "expo-router";
 import { MarcasStyles } from "../Styles/marcasStyle";
 import FooterNavigation from "../Componentes/FooterNavigation";
-import CategoryNavigation from "../Componentes/CategoryNavigation";
-import axios from "axios";
-import { API_URL } from "../../backend/utils/config";
+import CategoryNavigation from "../Componentes/CategoryNavigation"; // Asegúrate de que la ruta sea correcta
+import { Ionicons } from "@expo/vector-icons"; // Importa los íconos
 
 const MarcasScreen = () => {
   const router = useRouter();
-  const [tiendas, setTiendas] = useState([]);
-  const [page, setPage] = useState(1);
+  const [tiendas, setTiendas] = useState([]); // Almacena las tiendas
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(""); // Estado para la categoría seleccionada
+  const [selectedSubCategory, setSelectedSubCategory] = useState(""); // Estado para la subcategoría seleccionada
+  const [searchQuery, setSearchQuery] = useState(""); // Estado para la búsqueda
 
-  // Cargar tiendas según el filtro de categoría y búsqueda
+  // Cargar tiendas desde una fuente externa, como una API
   const loadTiendas = async () => {
-    if (loading || !hasMore) return;
     setLoading(true);
-
     try {
-      const url = `${API_URL}/api/tiendas?page=${page}&limit=10`;
-      const response = await axios.get(url);
+      // Simulación de una llamada API que devuelve las tiendas
+      // Esto debe ser reemplazado por tu lógica real de obtener tiendas
+      const fetchedTiendas = await fetch("https://tu-api-aqui.com/tiendas"); // Reemplazar con la URL de la API real
+      const data = await fetchedTiendas.json();
 
-      const nuevasTiendas = Array.isArray(response.data) ? response.data : [];
-
-      if (nuevasTiendas.length === 0) {
-        setHasMore(false);
-      } else {
-        setTiendas((prevTiendas) => [...prevTiendas, ...nuevasTiendas]);
-        setPage((prevPage) => prevPage + 1);
-      }
+      setTiendas(data); // Actualiza el estado con los datos obtenidos
     } catch (error) {
-      console.error("❌ Error al cargar tiendas:", error);
+      console.error("Error al cargar las tiendas", error);
     } finally {
-      setLoading(false);
+      setLoading(false); // Finaliza el estado de carga
     }
   };
 
   useEffect(() => {
-    loadTiendas();
-  }, [selectedCategory, searchQuery]);
+    loadTiendas(); // Llamada a la función cuando el componente se monta
+  }, []);
 
-  // Filtro de tiendas basado en la categoría seleccionada y la búsqueda
+  // Filtro de tiendas basado en la categoría seleccionada, subcategoría y búsqueda
   const filteredTiendas = tiendas.filter((tienda) => {
-    const matchesCategory = selectedCategory
-      ? tienda.categoria.toLowerCase().includes(selectedCategory.toLowerCase())
-      : true;
+    const matchesCategory = selectedCategory ? tienda.categoria?.toLowerCase().includes(selectedCategory.toLowerCase()) : true;
+    const matchesSubCategory = selectedSubCategory ? tienda.subCategoria?.toLowerCase().includes(selectedSubCategory.toLowerCase()) : true;
     const matchesSearch = tienda.nombre_tienda.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
+    return matchesCategory && matchesSubCategory && matchesSearch;
   });
 
   const renderFooter = () => {
@@ -70,46 +61,54 @@ const MarcasScreen = () => {
   };
 
   return (
-    <View style={MarcasStyles.container}>
-      <View style={MarcasStyles.header}>
-        <Text style={MarcasStyles.logo}>🛍️ Xyro</Text>
-        <Pressable onPress={() => router.push("/Carrito/carrito")}>
-          <Text style={MarcasStyles.cart}>🛒</Text>
-        </Pressable>
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
+      <View style={MarcasStyles.container}>
+        <View style={MarcasStyles.header}>
+          <Text style={MarcasStyles.logo}>🛍️ Xyro</Text>
+
+          {/* Carrito y Favoritos */}
+          <View style={MarcasStyles.iconsContainer}>
+            <Pressable onPress={() => router.push("/Carrito/carrito")} style={MarcasStyles.iconButton}>
+              <Ionicons name="cart-outline" size={28} color="#fff" />
+            </Pressable>
+
+            <Pressable onPress={() => router.push("/Herramientas/favoritos")} style={MarcasStyles.iconButton}>
+              <Ionicons name="heart-outline" size={28} color="#fff" />
+            </Pressable>
+          </View>
+        </View>
+
+        {/* Buscador */}
+        <CategoryNavigation onCategorySelect={setSelectedCategory} onSearchQueryChange={setSearchQuery} />
+
+        {/* Se agrega un margen aquí para evitar que el buscador se sobreponga */}
+        <View style={MarcasStyles.spacer}></View>
+
+        {/* Mensaje si no hay datos */}
+        {filteredTiendas.length === 0 && !loading ? (
+          <Text style={{ textAlign: "center", marginTop: 20, fontSize: 16, color: "red" }}>
+            ❌ No hay tiendas disponibles
+          </Text>
+        ) : (
+          <FlatList
+            data={filteredTiendas}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={renderTienda}
+            ListFooterComponent={renderFooter}
+            onEndReached={() => {
+              if (hasMore && !loading) {
+                loadTiendas(); // Cargar más tiendas al llegar al final
+              }
+            }}
+            onEndReachedThreshold={0.2} // Cuánto antes cargar más contenido
+            contentContainerStyle={MarcasStyles.flatListContainer} // Ajuste para el contenido
+          />
+        )}
+
+        <FooterNavigation />
       </View>
-
-      <CategoryNavigation onCategorySelect={setSelectedCategory} onSearchQueryChange={setSearchQuery} />
-
-      {/* Mensaje si no hay datos */}
-      {filteredTiendas.length === 0 && !loading ? (
-        <Text style={{ textAlign: "center", marginTop: 20, fontSize: 16, color: "red" }}>
-          ❌ No hay tiendas disponibles
-        </Text>
-      ) : (
-        <FlatList
-          data={filteredTiendas}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={renderTienda}
-          onEndReached={loadTiendas}
-          onEndReachedThreshold={0.2}
-          ListFooterComponent={renderFooter}
-        />
-      )}
-
-      <FooterNavigation />
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
 export default MarcasScreen;
-
-
-
-
-
-
-
-
-
-
-
