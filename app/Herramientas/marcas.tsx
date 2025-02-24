@@ -3,40 +3,56 @@ import { View, Text, FlatList, Pressable, ActivityIndicator, KeyboardAvoidingVie
 import { useRouter } from "expo-router";
 import { MarcasStyles } from "../Styles/marcasStyle";
 import FooterNavigation from "../Componentes/FooterNavigation";
-import CategoryNavigation from "../Componentes/CategoryNavigation"; // Asegúrate de que la ruta sea correcta
-import { Ionicons } from "@expo/vector-icons"; // Importa los íconos
+import CategoryNavigation from "../Componentes/CategoryNavigation"; 
+import { Ionicons } from "@expo/vector-icons"; 
+import { backend } from "@/context/endpoints";
 
 const MarcasScreen = () => {
   const router = useRouter();
-  const [tiendas, setTiendas] = useState([]); // Almacena las tiendas
+  const [tiendas, setTiendas] = useState([]); 
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState(""); // Estado para la categoría seleccionada
-  const [selectedSubCategory, setSelectedSubCategory] = useState(""); // Estado para la subcategoría seleccionada
-  const [searchQuery, setSearchQuery] = useState(""); // Estado para la búsqueda
+  const [page, setPage] = useState(1); // Página para la paginación
+  const [selectedCategory, setSelectedCategory] = useState(""); 
+  const [selectedSubCategory, setSelectedSubCategory] = useState(""); 
+  const [searchQuery, setSearchQuery] = useState(""); 
 
-  // Cargar tiendas desde una fuente externa, como una API
+  // Función para cargar tiendas con paginación
   const loadTiendas = async () => {
+    if (!hasMore || loading) return; // Evitar carga si no hay más datos o ya está cargando
+
     setLoading(true);
     try {
-      // Simulación de una llamada API que devuelve las tiendas
-      // Esto debe ser reemplazado por tu lógica real de obtener tiendas
-      const fetchedTiendas = await fetch("https://tu-api-aqui.com/tiendas"); // Reemplazar con la URL de la API real
-      const data = await fetchedTiendas.json();
+      const response = await fetch(`${backend}/api/tiendas?page=${page}&limit=10`);
+      const text = await response.text(); 
 
-      setTiendas(data); // Actualiza el estado con los datos obtenidos
+      console.log("📌 Respuesta del servidor:", text);
+
+      try {
+        const data = JSON.parse(text);
+        if (response.ok) {
+          setTiendas((prevTiendas) => [...prevTiendas, ...data.tiendas]); // Agrega nuevas tiendas
+          setHasMore(data.hasMore); // Indica si hay más tiendas por cargar
+          setPage((prevPage) => prevPage + 1); // Incrementa la página
+        } else {
+          console.error("❌ Error al obtener tiendas:", data.error);
+        }
+      } catch (jsonError) {
+        console.error("❌ Error parseando JSON:", jsonError);
+      }
+
     } catch (error) {
-      console.error("Error al cargar las tiendas", error);
+      console.error("❌ Error al cargar las tiendas:", error);
     } finally {
-      setLoading(false); // Finaliza el estado de carga
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    loadTiendas(); // Llamada a la función cuando el componente se monta
+    loadTiendas(); // Carga inicial
   }, []);
 
-  // Filtro de tiendas basado en la categoría seleccionada, subcategoría y búsqueda
+  // Filtrado de tiendas según categoría, subcategoría y búsqueda
   const filteredTiendas = tiendas.filter((tienda) => {
     const matchesCategory = selectedCategory ? tienda.categoria?.toLowerCase().includes(selectedCategory.toLowerCase()) : true;
     const matchesSubCategory = selectedSubCategory ? tienda.subCategoria?.toLowerCase().includes(selectedSubCategory.toLowerCase()) : true;
@@ -81,7 +97,7 @@ const MarcasScreen = () => {
         {/* Buscador */}
         <CategoryNavigation onCategorySelect={setSelectedCategory} onSearchQueryChange={setSearchQuery} />
 
-        {/* Se agrega un margen aquí para evitar que el buscador se sobreponga */}
+        {/* Espaciador */}
         <View style={MarcasStyles.spacer}></View>
 
         {/* Mensaje si no hay datos */}
@@ -95,13 +111,9 @@ const MarcasScreen = () => {
             keyExtractor={(item, index) => index.toString()}
             renderItem={renderTienda}
             ListFooterComponent={renderFooter}
-            onEndReached={() => {
-              if (hasMore && !loading) {
-                loadTiendas(); // Cargar más tiendas al llegar al final
-              }
-            }}
+            onEndReached={loadTiendas} // Cargar más tiendas al llegar al final
             onEndReachedThreshold={0.2} // Cuánto antes cargar más contenido
-            contentContainerStyle={MarcasStyles.flatListContainer} // Ajuste para el contenido
+            contentContainerStyle={MarcasStyles.flatListContainer} 
           />
         )}
 
