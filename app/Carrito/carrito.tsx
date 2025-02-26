@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, FlatList, Pressable, ActivityIndicator, Image, Alert } from "react-native";
+import { View, Text, FlatList, Pressable, Alert } from "react-native";
 import { useCart } from "@/context/CartContext";
 import { CarritoStyles } from "../Styles/CarritoStyle";
 import { Ionicons } from "@expo/vector-icons";
@@ -10,8 +10,8 @@ const CarritoScreen = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-  // Función para manejar la actualización de cantidad
-  const handleUpdateQuantity = (nombre_producto, cantidad) => {
+  // Función para actualizar la cantidad del producto
+  const handleUpdateQuantity = (nombre_producto, cantidad, stock) => {
     if (cantidad < 1) {
       Alert.alert(
         "Cantidad mínima",
@@ -21,9 +21,20 @@ const CarritoScreen = () => {
           { text: "Eliminar", onPress: () => removeFromCart(nombre_producto) },
         ]
       );
+    } else if (cantidad > stock) {
+      Alert.alert("Stock insuficiente", `Solo hay ${stock} unidades disponibles.`);
     } else {
       updateQuantity(nombre_producto, cantidad);
     }
+  };
+
+  // Generar opciones de stock en incrementos de 10
+  const generateStockOptions = (stock) => {
+    const options = [];
+    for (let i = 10; i <= stock; i += 10) {
+      options.push(i);
+    }
+    return options;
   };
 
   // Calcular el total y el envío
@@ -62,15 +73,35 @@ const CarritoScreen = () => {
                   <View style={CarritoStyles.productInfo}>
                     <Text style={CarritoStyles.productName}>{item.nombre_producto}</Text>
                     <Text style={CarritoStyles.productPrice}>💲 {parseFloat(item.precio).toFixed(2)}</Text>
+
                     {/* Controles de cantidad */}
                     <View style={CarritoStyles.quantityContainer}>
-                      <Pressable onPress={() => handleUpdateQuantity(item.nombre_producto, item.cantidad - 1)}>
+                      <Pressable
+                        onPress={() => handleUpdateQuantity(item.nombre_producto, item.cantidad - 5, item.stock)}
+                      >
                         <Ionicons name="remove-circle-outline" size={26} color="red" />
                       </Pressable>
 
-                      <Text style={CarritoStyles.productQuantity}>{item.cantidad}</Text>
+                      {/* Selector de stock en incrementos de 10 */}
+                      <Pressable
+                        onPress={() =>
+                          Alert.alert(
+                            "Selecciona la cantidad",
+                            "Escoge una cantidad disponible",
+                            generateStockOptions(item.stock).map((qty) => ({
+                              text: `${qty} unidades`,
+                              onPress: () => handleUpdateQuantity(item.nombre_producto, qty, item.stock),
+                            }))
+                          )
+                        }
+                        style={CarritoStyles.stockSelectorButton}
+                      >
+                        <Text style={CarritoStyles.productQuantity}>{item.cantidad} 🏷️</Text>
+                      </Pressable>
 
-                      <Pressable onPress={() => handleUpdateQuantity(item.nombre_producto, item.cantidad + 1)}>
+                      <Pressable
+                        onPress={() => handleUpdateQuantity(item.nombre_producto, item.cantidad + 10, item.stock)}
+                      >
                         <Ionicons name="add-circle-outline" size={26} color="green" />
                       </Pressable>
                     </View>

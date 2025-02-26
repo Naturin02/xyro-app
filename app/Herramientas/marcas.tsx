@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { 
   View, Text, FlatList, Pressable, ActivityIndicator, 
-  KeyboardAvoidingView, Platform, Modal, Image 
+  KeyboardAvoidingView, Platform, Modal, Image, Alert 
 } from "react-native";
 import { useRouter } from "expo-router";
 import { MarcasStyles } from "../Styles/marcasStyle";
-import { ProductStyles } from "../Styles/CatalogoStyle"; // Estilos de productos
+import { ProductStyles } from "../Styles/CatalogoStyle"; // Usa los estilos de Catalogo
 import FooterNavigation from "../Componentes/FooterNavigation";
 import CategoryNavigation from "../Componentes/CategoryNavigation"; 
 import { Ionicons } from "@expo/vector-icons"; 
 import { backend } from "@/context/endpoints";
+import { useCart } from "@/context/CartContext"; // Agregamos el carrito
 
 const MarcasScreen = () => {
   const router = useRouter();
@@ -21,9 +22,13 @@ const MarcasScreen = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
+  // Modal
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
+
+  // Carrito
+  const { addToCart } = useCart();
 
   // Función para cargar tiendas y productos con paginación
   const loadTiendasYProductos = async () => {
@@ -38,13 +43,13 @@ const MarcasScreen = () => {
       const productoData = await productoResponse.json();
 
       if (tiendaResponse.ok) {
-        setTiendas(prevTiendas => [...prevTiendas, ...tiendaData.tiendas]); // Acumular tiendas
+        setTiendas(prevTiendas => [...prevTiendas, ...tiendaData.tiendas]);
         setHasMore(tiendaData.hasMore); 
         setPage(prevPage => prevPage + 1);
       }
 
       if (productoResponse.ok) {
-        setProductos(prevProductos => [...prevProductos, ...productoData.productos]); // Acumular productos
+        setProductos(prevProductos => [...prevProductos, ...productoData.productos]);
       }
 
     } catch (error) {
@@ -68,14 +73,17 @@ const MarcasScreen = () => {
     setModalVisible(true);
   };
 
-  // Filtrado de tiendas y productos según búsqueda
-  const filteredTiendas = tiendas.filter((tienda) =>
-    tienda.nombre_tienda.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const filteredProductos = productos.filter((producto) =>
-    producto.nombre_producto.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Función para agregar al carrito con validación de stock
+  const addProductToCart = () => {
+    if (selectedProduct) {
+      if (quantity > selectedProduct.stock) {
+        Alert.alert("Stock insuficiente", "No puedes agregar más productos de los que hay en stock.");
+      } else {
+        addToCart(selectedProduct, quantity);
+        setModalVisible(false);
+      }
+    }
+  };
 
   const renderFooter = () => (!loading ? null : <ActivityIndicator size="large" color="#0000ff" />);
 
@@ -99,6 +107,8 @@ const MarcasScreen = () => {
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
       <View style={MarcasStyles.container}>
+        
+        {/* NAVBAR CON LOGO, CARRITO Y FAVORITOS */}
         <View style={MarcasStyles.header}>
           <Text style={MarcasStyles.logo}>🛍️ Xyro</Text>
           <View style={MarcasStyles.iconsContainer}>
@@ -111,52 +121,39 @@ const MarcasScreen = () => {
           </View>
         </View>
 
-        {/* Buscador y Filtros */}
         <CategoryNavigation onCategorySelect={setSelectedCategory} onSearchQueryChange={setSearchQuery} />
 
-        <View style={MarcasStyles.spacer}></View>
-
-        {/* Mostrar cantidad de tiendas disponibles solo si NO se selecciona categoría */}
         {!selectedCategory && (
           <Text style={{ textAlign: "center", fontSize: 18, fontWeight: "bold", marginVertical: 10 }}>
-            🏬 {filteredTiendas.length} Tiendas disponibles
+            🏬 {tiendas.length} Tiendas disponibles
           </Text>
         )}
 
-        {/* Mostrar tiendas o productos */}
         {selectedCategory ? (
-          filteredProductos.length === 0 && !loading ? (
-            <Text style={{ textAlign: "center", marginTop: 20, fontSize: 16, color: "red" }}>❌ No hay productos disponibles</Text>
-          ) : (
-            <FlatList
-              data={filteredProductos}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={renderProducto}
-              ListFooterComponent={renderFooter}
-              onEndReached={loadTiendasYProductos}
-              onEndReachedThreshold={0.2}
-              contentContainerStyle={ProductStyles.productList}
-            />
-          )
+          <FlatList
+            data={productos}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={renderProducto}
+            ListFooterComponent={renderFooter}
+            onEndReached={loadTiendasYProductos}
+            onEndReachedThreshold={0.2}
+            contentContainerStyle={ProductStyles.productList}
+          />
         ) : (
-          filteredTiendas.length === 0 && !loading ? (
-            <Text style={{ textAlign: "center", marginTop: 20, fontSize: 16, color: "red" }}>❌ No hay tiendas disponibles</Text>
-          ) : (
-            <FlatList
-              data={filteredTiendas}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={renderTienda}
-              ListFooterComponent={renderFooter}
-              onEndReached={loadTiendasYProductos}
-              onEndReachedThreshold={0.2}
-              contentContainerStyle={MarcasStyles.flatListContainer}
-            />
-          )
+          <FlatList
+            data={tiendas}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={renderTienda}
+            ListFooterComponent={renderFooter}
+            onEndReached={loadTiendasYProductos}
+            onEndReachedThreshold={0.2}
+            contentContainerStyle={MarcasStyles.flatListContainer}
+          />
         )}
 
         <FooterNavigation />
 
-        {/* Modal de Producto */}
+        {/* MODAL DE PRODUCTO CON VALIDACIÓN DE STOCK */}
         <Modal visible={modalVisible} transparent={true} animationType="fade">
           <View style={ProductStyles.modalContainer}>
             <View style={ProductStyles.modalContent}>
@@ -166,6 +163,30 @@ const MarcasScreen = () => {
               <Image source={{ uri: selectedProduct?.imagen_url }} style={ProductStyles.modalProductImage} />
               <Text style={ProductStyles.modalProductName}>{selectedProduct?.nombre_producto}</Text>
               <Text style={ProductStyles.modalProductPrice}>💲 {parseFloat(selectedProduct?.precio).toFixed(2)}</Text>
+
+              {/* CONTROLES DE CANTIDAD */}
+              <View style={ProductStyles.quantityContainer}>
+                <Pressable onPress={() => setQuantity(Math.max(1, quantity - 1))} style={ProductStyles.quantityButton}>
+                  <Ionicons name="remove-circle-outline" size={30} color="red" />
+                </Pressable>
+                <Text style={{ fontSize: 20, fontWeight: "bold" }}>{quantity}</Text>
+                <Pressable 
+                  onPress={() => {
+                    if (quantity < selectedProduct?.stock) {
+                      setQuantity(quantity + 1);
+                    } else {
+                      Alert.alert("Stock agotado", "Has alcanzado el límite de stock para este producto.");
+                    }
+                  }} 
+                  style={ProductStyles.quantityButton}
+                >
+                  <Ionicons name="add-circle-outline" size={30} color="green" />
+                </Pressable>
+              </View>
+
+              <Pressable style={ProductStyles.addToCartButton} onPress={addProductToCart}>
+                <Text style={ProductStyles.addToCartButtonText}>Añadir producto</Text>
+              </Pressable>
             </View>
           </View>
         </Modal>
