@@ -1,23 +1,28 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Platform } from "react-native";
 import { Color, FontFamily, FontSize } from "../../constants/GlobalStyles";
 
 export const CuentaStyles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Color.colorWhite,
-    padding: 20,
+    paddingHorizontal: 20,
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: 20,
+    backgroundColor: '#000',
+    paddingTop: Platform.OS === 'ios' ? 50 : 20,
+    paddingBottom: 10,
+    paddingHorizontal: 15,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#333',
   },
   headerTitle: {
     fontSize: FontSize.size_xl, // Título más pequeño
     fontFamily: FontFamily.juaRegular,
     fontWeight: "bold",
-    color: "#333", // Título más visible
+    color: '#fff',
   },
   userContainer: {
     backgroundColor: Color.colorWhite,

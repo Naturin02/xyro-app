@@ -1,11 +1,37 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Platform } from "react-native";
 import { Color, FontFamily, FontSize } from "../../constants/GlobalStyles"; // Asegúrate de que la ruta sea correcta
 
 export const FavoritosStyles = StyleSheet.create({
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    backgroundColor: '#fff',
+    backgroundColor: '#000',
+    paddingTop: Platform.OS === 'ios' ? 50 : 20,
+    paddingBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#333',
+  },
+  backButton: {
+    padding: 5,
+  },
+  headerTitle: {
+    flex: 1,
+    textAlign: 'center',
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  headerIcons: {
+    flexDirection: 'row',
+    gap: 15,
+  },
   container: {
     flex: 1,
-    backgroundColor: Color.colorWhite,
-    padding: 16,
+    backgroundColor: '#fff',
   },
   title: {
     fontSize: FontSize.size_lg,

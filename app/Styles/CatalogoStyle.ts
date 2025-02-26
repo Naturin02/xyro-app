@@ -1,30 +1,39 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Platform } from "react-native";
 import { Color, FontFamily, FontSize } from "../../constants/GlobalStyles"; 
 import ProductGrid from "../Herramientas/catalogo";
 
 export const ProductStyles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Color.colorWhite,
-    paddingTop: 20,
+  headerContainer: {
+    backgroundColor: '#000',
+    paddingTop: Platform.OS === 'ios' ? 50 : 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#333',
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    backgroundColor: '#f8f8f8', // Color de fondo
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
+    justifyContent: 'space-between',
+    paddingHorizontal: 15,
+    paddingBottom: 10,
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
   },
   searchInput: {
-    width: '70%',
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    padding: 10,
-    fontSize: FontSize.size_smi,
+    flex: 1,
+    height: 40,
+    backgroundColor: '#333',
+    borderRadius: 20,
+    paddingHorizontal: 15,
+    marginHorizontal: 10,
+    color: '#fff',
+  },
+  noProductsText: {
+    textAlign: "center",
+    marginTop: 20,
+    fontSize: 16,
+    color: "red",
   },
   cartBadge: {
     position: 'absolute',

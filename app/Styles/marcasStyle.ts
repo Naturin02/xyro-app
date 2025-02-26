@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Platform } from "react-native";
 import { Color, FontFamily, FontSize } from "../../constants/GlobalStyles"; // Asegúrate de que la ruta sea correcta
 
 export const MarcasStyles = StyleSheet.create({
@@ -14,26 +14,22 @@ export const MarcasStyles = StyleSheet.create({
     paddingBottom: 50, // Reducir espacio en la parte inferior
   },
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    padding: 8, // Reducir padding en el header
-    backgroundColor: Color.colorBlack,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 5, // Para Android
-    height: 45, // Reducir la altura
+    backgroundColor: '#000', // Cambiado de '#007AFF' a '#000'
+    paddingTop: Platform.OS === 'ios' ? 50 : 20, // Ajusta este valor según necesites
+    paddingBottom: 10,
+    paddingHorizontal: 15,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   logo: {
-    color: Color.colorWhite,
-    fontSize: FontSize.size_lg, // Mantener el tamaño reducido del logo
-    fontFamily: FontFamily.juaRegular,
+    color: '#fff',
+    fontSize: 24,
+    fontWeight: 'bold',
   },
   iconsContainer: {
-    flexDirection: "row", // Alinea los íconos en una fila
-    justifyContent: "flex-end", // Alinea los íconos a la derecha
-    alignItems: "center",
+    flexDirection: 'row',
+    gap: 15,
   },
   iconButton: {
     marginLeft: 8, // Reducir espacio entre los íconos
