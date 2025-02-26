@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, FlatList, Pressable, Alert } from "react-native";
+import { View, Text, FlatList, Pressable, ActivityIndicator, Image, Alert } from "react-native";
 import { useCart } from "@/context/CartContext";
 import { CarritoStyles } from "../Styles/CarritoStyle";
 import { Ionicons } from "@expo/vector-icons";
@@ -26,6 +26,13 @@ const CarritoScreen = () => {
     }
   };
 
+  // Calcular el total y el envío
+  const getTotal = () => {
+    const total = cart.reduce((sum, item) => sum + item.precio * item.cantidad, 0);
+    const shipping = 30; // Costo de envío fijo
+    return { total, shipping, subtotal: total + shipping };
+  };
+
   return (
     <View style={CarritoStyles.container}>
       {/* Encabezado */}
@@ -48,22 +55,26 @@ const CarritoScreen = () => {
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => (
               <View style={CarritoStyles.productContainer}>
-                <Text style={CarritoStyles.productName}>{item.nombre_producto}</Text>
-                <Text style={CarritoStyles.productPrice}>
-                  💲 {item.precio ? parseFloat(item.precio).toFixed(2) : "N/A"}
-                </Text>
+                <View style={CarritoStyles.productRow}>
+                  {/* Cuadro gris simulado para la imagen */}
+                  <View style={CarritoStyles.productImagePlaceholder}></View>
 
-                {/* Controles de cantidad */}
-                <View style={CarritoStyles.quantityContainer}>
-                  <Pressable onPress={() => handleUpdateQuantity(item.nombre_producto, item.cantidad - 1)}>
-                    <Ionicons name="remove-circle-outline" size={26} color="red" />
-                  </Pressable>
+                  <View style={CarritoStyles.productInfo}>
+                    <Text style={CarritoStyles.productName}>{item.nombre_producto}</Text>
+                    <Text style={CarritoStyles.productPrice}>💲 {parseFloat(item.precio).toFixed(2)}</Text>
+                    {/* Controles de cantidad */}
+                    <View style={CarritoStyles.quantityContainer}>
+                      <Pressable onPress={() => handleUpdateQuantity(item.nombre_producto, item.cantidad - 1)}>
+                        <Ionicons name="remove-circle-outline" size={26} color="red" />
+                      </Pressable>
 
-                  <Text style={CarritoStyles.productQuantity}>{item.cantidad}</Text>
+                      <Text style={CarritoStyles.productQuantity}>{item.cantidad}</Text>
 
-                  <Pressable onPress={() => handleUpdateQuantity(item.nombre_producto, item.cantidad + 1)}>
-                    <Ionicons name="add-circle-outline" size={26} color="green" />
-                  </Pressable>
+                      <Pressable onPress={() => handleUpdateQuantity(item.nombre_producto, item.cantidad + 1)}>
+                        <Ionicons name="add-circle-outline" size={26} color="green" />
+                      </Pressable>
+                    </View>
+                  </View>
                 </View>
 
                 {/* Botón de eliminar */}
@@ -75,14 +86,30 @@ const CarritoScreen = () => {
             )}
           />
 
-          {/* Botón de proceder al pago */}
-          <Pressable
-            style={[CarritoStyles.checkoutButton, loading && CarritoStyles.disabledButton]}
-            onPress={() => Alert.alert("Funcionalidad en desarrollo", "El pago estará disponible pronto.")}
-            disabled={loading}
-          >
-            <Text style={CarritoStyles.checkoutButtonText}>Proceder al pago</Text>
-          </Pressable>
+          {/* Sección de Totales */}
+          <View style={CarritoStyles.totalSection}>
+            <View style={CarritoStyles.totalRow}>
+              <Text style={CarritoStyles.totalText}>Selected Items</Text>
+              <Text style={CarritoStyles.totalText}>💲 {getTotal().total.toFixed(2)}</Text>
+            </View>
+            <View style={CarritoStyles.totalRow}>
+              <Text style={CarritoStyles.totalText}>Shipping Fee</Text>
+              <Text style={CarritoStyles.totalText}>💲 {getTotal().shipping.toFixed(2)}</Text>
+            </View>
+            <View style={CarritoStyles.totalRow}>
+              <Text style={CarritoStyles.subtotalText}>Subtotal</Text>
+              <Text style={CarritoStyles.subtotalText}>💲 {getTotal().subtotal.toFixed(2)}</Text>
+            </View>
+
+            {/* Botón de proceder al pago */}
+            <Pressable
+              style={[CarritoStyles.checkoutButton, loading && CarritoStyles.disabledButton]}
+              onPress={() => Alert.alert("Funcionalidad en desarrollo", "El pago estará disponible pronto.")}
+              disabled={loading}
+            >
+              <Text style={CarritoStyles.checkoutButtonText}>Proceder al pago</Text>
+            </Pressable>
+          </View>
         </>
       )}
     </View>

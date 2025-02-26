@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, TouchableOpacity, Modal, Pressable, ActivityIndicator } from "react-native";
-import { useRouter, useLocalSearchParams } from "expo-router";
+import React, { useState, useEffect } from "react";
+import { View, Text, FlatList, TouchableOpacity, Modal, Pressable, TextInput, Image, ActivityIndicator, Dimensions } from "react-native";
+import { useRouter, useLocalSearchParams } from "expo-router"; 
 import { Ionicons } from "@expo/vector-icons";
-import { ProductStyles } from "../Styles/CatalogoStyle";
+import { ProductStyles } from "../Styles/CatalogoStyle"; // Ruta de tus estilos
 import { useCart } from "@/context/CartContext";
 import FooterNavigation from "../Componentes/FooterNavigation";
 import { backend } from "@/context/endpoints"; // URL del backend
 
-const ProductGrid = () => {
+const { width, height } = Dimensions.get("window"); // Obtener las dimensiones de la pantalla
+
+const ProductGrid = ({ category }) => {  // Recibimos la categoría como prop
   const [products, setProducts] = useState([]);
+  const [searchQuery, setSearchQuery] = useState(''); // Para manejar la búsqueda
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [modalVisible, setModalVisible] = useState(false);
@@ -27,19 +30,25 @@ const ProductGrid = () => {
     setPage(1);
     setHasMore(true);
     loadProducts(1, true);
-  }, [tienda]);
+  }, [tienda, category]);  // Ahora también depende de la categoría seleccionada
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (searchQuery) {
+        loadProducts(1, true); // Hacer la búsqueda al terminar de escribir
+      }
+    }, 500); // Espera 500ms después de dejar de escribir
+
+    return () => clearTimeout(timer); // Limpiar el timeout cuando el componente se desmonta o el query cambia
+  }, [searchQuery]);
 
   const loadProducts = async (pageNumber, reset = false) => {
     if (!hasMore || loading) return;
 
     setLoading(true);
     try {
-      console.log(`🔍 Cargando productos de la tienda: ${tienda} - Página: ${pageNumber}`);
-
-      const response = await fetch(`${backend}/api/productos?page=${pageNumber}&limit=10&tienda=${encodeURIComponent(tienda)}`);
+      const response = await fetch(`${backend}/api/productos?page=${pageNumber}&limit=10&tienda=${encodeURIComponent(tienda)}&category=${encodeURIComponent(category)}&search=${encodeURIComponent(searchQuery)}`);
       const data = await response.json();
-
-      console.log("📦 Productos recibidos:", data);
 
       if (response.ok) {
         setProducts((prevProducts) => (reset ? data.productos : [...prevProducts, ...data.productos]));
@@ -68,29 +77,30 @@ const ProductGrid = () => {
     }
   };
 
-  const renderItem = ({ item }) => {
-    return (
-      <View style={ProductStyles.productContainer}>
-        <TouchableOpacity style={ProductStyles.addButton} onPress={() => openModal(item)}>
-          <Text style={ProductStyles.addButtonText}>Añadir</Text>
-        </TouchableOpacity>
+  const renderItem = ({ item }) => (
+    <View style={ProductStyles.productContainer}>
+      <TouchableOpacity style={ProductStyles.productCard} onPress={() => openModal(item)}>
+        <Image source={{ uri: item.imagen_url }} style={ProductStyles.productImage} />
         <Text style={ProductStyles.productName}>{item.nombre_producto}</Text>
         <Text style={ProductStyles.productPrice}>💲 {parseFloat(item.precio).toFixed(2)}</Text>
-        <Text style={ProductStyles.productStock}>📦 Stock: {item.stock}</Text>
-        <TouchableOpacity style={ProductStyles.commentButton}>
-          <Text>Comentarios</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  };
+      </TouchableOpacity>
+    </View>
+  );
 
   return (
     <View style={ProductStyles.container}>
+      {/* Barra de búsqueda y carrito */}
       <View style={ProductStyles.header}>
-        <Pressable onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={28} color="black" />
+        <Pressable onPress={() => router.back()} style={ProductStyles.exitButton}>
+          <Ionicons name="chevron-back" size={28} color="black" />
         </Pressable>
-        <Text style={ProductStyles.headerTitle}>{tienda}</Text>
+        <TextInput
+          style={ProductStyles.searchInput}
+          placeholder="Buscar productos..."
+          value={searchQuery}
+          onChangeText={setSearchQuery}  // Actualiza el estado de búsqueda
+          onSubmitEditing={() => loadProducts(1, true)}  // Realiza la búsqueda cuando presionan Enter
+        />
         <Pressable onPress={() => router.push("/Carrito/carrito")}>
           <Ionicons name="cart-outline" size={28} color="black" />
           {cart.length > 0 && (
@@ -101,16 +111,20 @@ const ProductGrid = () => {
         </Pressable>
       </View>
 
+      {/* Título de la sección Explore */}
+      <Text style={ProductStyles.sectionTitle}>Explore</Text>
+
+      {/* Lista de productos */}
       {products.length === 0 && !loading ? (
         <Text style={{ textAlign: "center", marginTop: 20, fontSize: 16, color: "red" }}>
-          ❌ No hay productos disponibles en esta tienda
+          ❌ No hay productos disponibles
         </Text>
       ) : (
         <FlatList
           data={products}
           renderItem={renderItem}
-          keyExtractor={(item, index) => index.toString()}
-          numColumns={2}
+          keyExtractor={(item) => item.id?.toString() || Math.random().toString()}
+          numColumns={width > 600 ? 3 : 2} // Ajusta el número de columnas según el ancho de la pantalla
           contentContainerStyle={ProductStyles.productList}
           onEndReached={() => loadProducts(page)}
           onEndReachedThreshold={0.2}
@@ -118,18 +132,31 @@ const ProductGrid = () => {
         />
       )}
 
-      {/* Modal para seleccionar cantidad */}
-      <Modal visible={modalVisible} transparent={true} animationType="fade">
+      {/* Modal de vista detallada del producto */}
+      <Modal visible={modalVisible} transparent={false} animationType="slide">
         <View style={ProductStyles.modalContainer}>
           <View style={ProductStyles.modalContent}>
-            
             {/* Botón de cerrar modal */}
             <Pressable onPress={() => setModalVisible(false)} style={ProductStyles.closeButton}>
               <Ionicons name="close-circle" size={30} color="gray" />
             </Pressable>
 
-            <Text style={{ fontSize: 18, fontWeight: "bold" }}>Cantidad de los productos</Text>
+            {/* Imagen del producto */}
+            <Image source={{ uri: selectedProduct?.imagen_url }} style={ProductStyles.modalProductImage} />
+            <Text style={ProductStyles.modalProductName}>{selectedProduct?.nombre_producto}</Text>
+            <Text style={ProductStyles.modalProductPrice}>💲 {parseFloat(selectedProduct?.precio).toFixed(2)}</Text>
 
+            {/* Calificación del producto */}
+            <View style={ProductStyles.ratingContainer}>
+              <Text style={ProductStyles.rating}>⭐ {selectedProduct?.rating || 'No rating'}</Text>
+            </View>
+
+            {/* Opciones de color */}
+            {selectedProduct?.colores && (
+              <Text style={ProductStyles.colorOption}>Color options: {selectedProduct.colores.join(", ")}</Text>
+            )}
+
+            {/* Contenedor de cantidad */}
             <View style={ProductStyles.quantityContainer}>
               <Pressable onPress={() => setQuantity(Math.max(1, quantity - 1))} style={ProductStyles.quantityButton}>
                 <Ionicons name="remove-circle-outline" size={30} color="red" />
@@ -139,7 +166,7 @@ const ProductGrid = () => {
 
               <Pressable
                 onPress={() => {
-                  if (quantity < selectedProduct.stock) {
+                  if (quantity < selectedProduct?.stock) {
                     setQuantity(quantity + 1);
                   } else {
                     setAlertVisible(true);
@@ -151,6 +178,7 @@ const ProductGrid = () => {
               </Pressable>
             </View>
 
+            {/* Botón para agregar al carrito */}
             <Pressable style={ProductStyles.addToCartButton} onPress={addProductToCart}>
               <Text style={ProductStyles.addToCartButtonText}>Añadir producto</Text>
             </Pressable>

@@ -46,6 +46,9 @@ export const MarcasStyles = StyleSheet.create({
     color: Color.colorWhite,
     fontSize: FontSize.size_lg, // Reducir tamaño de los íconos
   },
+  // ------------------------------
+  // Estilos para las tiendas (se mantienen)
+  // ------------------------------
   tiendaContainer: {
     padding: 10, // Reducir padding
     marginHorizontal: 12,
@@ -60,29 +63,39 @@ export const MarcasStyles = StyleSheet.create({
     borderBottomColor: Color.colorBlack, // Línea negra
     marginBottom: 10, // Reducir margen inferior entre las tiendas
   },
+  tiendaImagen: {
+    width: "100%",
+    height: 120, // Tamaño ajustado para imagen de la tienda
+    borderRadius: 8,
+    marginBottom: 5,
+  },
   tiendaNombre: {
     fontSize: FontSize.size_smi, // Reducir el tamaño del texto
     fontFamily: FontFamily.juaRegular,
     color: Color.colorBlack,
     fontWeight: "bold",
+    textAlign: "center",
   },
   tiendaHorarios: {
-    fontSize: FontSize.size_smi, // Reducir tamaño de texto
+    fontSize: FontSize.size_smi,
     fontFamily: FontFamily.juaRegular,
     color: Color.colorDarkslategray,
     marginTop: 3,
+    textAlign: "center",
   },
   tiendaDireccion: {
-    fontSize: FontSize.size_smi, // Reducir tamaño de texto
+    fontSize: FontSize.size_smi,
     fontFamily: FontFamily.juaRegular,
     color: Color.colorDarkslategray,
     marginTop: 3,
+    textAlign: "center",
   },
   tiendaDescripcion: {
-    fontSize: FontSize.size_smi, // Reducir tamaño de texto
+    fontSize: FontSize.size_smi,
     fontFamily: FontFamily.juaRegular,
     color: Color.colorDarkslategray,
     marginTop: 3,
+    textAlign: "center",
   },
 });
 
