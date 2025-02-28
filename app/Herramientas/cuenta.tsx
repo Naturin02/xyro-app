@@ -63,7 +63,7 @@ const CuentaScreen = () => {
 
             {/* Botón de cerrar sesión */}
             <Pressable style={CuentaStyles.logoutButton} onPress={() => router.replace("/Inicio_Sesion/login")}> 
-              <Text style={CuentaStyles.logoutButtonText}>Cerrar Sesión</Text>
+              <Text style={CuentaStyles.logoutButton}>Cerrar Sesión</Text>
             </Pressable>
 
             {/* Botón para eliminar cuenta */}

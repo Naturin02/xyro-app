@@ -33,7 +33,7 @@ export const FooterNavigationStyle = StyleSheet.create({
     color: Color.colorBlack,
     marginTop: 5,
     marginLeft: 8, // Añadimos espacio entre el ícono y el texto
-    transition: "color 0.3s", // Transición suave para el cambio de color
+    // Transición suave para el cambio de color
   },
   activeButton: {
     backgroundColor: "#ff6347", // Fondo de botón activo en color rojo tomate
@@ -46,12 +46,12 @@ export const FooterNavigationStyle = StyleSheet.create({
     shadowRadius: 6,
     elevation: 6,
     transform: [{ scale: 1.05 }], // Efecto de ampliación sutil cuando está activo
-    transition: "background-color 0.3s, transform 0.2s", // Efecto de transición suave
+    // Efecto de transición suave
   },
   activeText: {
     color: Color.colorWhite, // Texto blanco cuando el botón está activo
     fontWeight: "bold", // Negrita para resaltar más el texto
-    transition: "color 0.3s", // Transición suave para el cambio de color
+    // Transición suave para el cambio de color
   },
   footerItemInactive: {
     opacity: 0.6, // Icono más tenue cuando no está activo

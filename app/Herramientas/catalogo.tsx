@@ -10,16 +10,16 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 const { width } = Dimensions.get("window"); // Obtener las dimensiones de la pantalla
 
-const ProductGrid = ({ category }) => {
-  const [products, setProducts] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [quantity, setQuantity] = useState(1);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [alertVisible, setAlertVisible] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
-  const [page, setPage] = useState(1);
+const ProductGrid = ({ category }: { category: string }) => {
+  const [products, setProducts] = useState<any[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  const [quantity, setQuantity] = useState<number>(1);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [alertVisible, setAlertVisible] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [hasMore, setHasMore] = useState<boolean>(true);
+  const [page, setPage] = useState<number>(1);
 
   const router = useRouter();
   const { tienda } = useLocalSearchParams();
@@ -42,12 +42,12 @@ const ProductGrid = ({ category }) => {
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
-  const loadProducts = async (pageNumber, reset = false) => {
+  const loadProducts = async (pageNumber: number, reset = false) => {
     if (!hasMore || loading) return;
 
     setLoading(true);
     try {
-      const response = await fetch(`${backend}/api/productos?page=${pageNumber}&limit=10&tienda=${encodeURIComponent(tienda)}&category=${encodeURIComponent(category)}&search=${encodeURIComponent(searchQuery)}`);
+      const response = await fetch(`${backend}/api/productos?page=${pageNumber}&limit=10&tienda=${encodeURIComponent(tienda as string)}&category=${encodeURIComponent(category)}&search=${encodeURIComponent(searchQuery)}`);
       const data = await response.json();
 
       if (response.ok) {
@@ -64,7 +64,7 @@ const ProductGrid = ({ category }) => {
     }
   };
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({ item }: { item: any }) => (
     <View style={ProductStyles.productContainer}>
       <TouchableOpacity style={ProductStyles.productCard} onPress={() => setSelectedProduct(item)}>
         <Image source={{ uri: item.imagen_url || `${backend}/images/default.png` }} style={ProductStyles.productImage} />

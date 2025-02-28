@@ -11,10 +11,23 @@ import CategoryNavigation from "../Componentes/CategoryNavigation";
 import { Ionicons } from "@expo/vector-icons"; 
 import { backend } from "@/context/endpoints";
 
+interface Tienda {
+  nombre_tienda: string;
+  horarios: string;
+  direccion: string;
+  descripcion: string;
+}
+
+interface Producto {
+  nombre_producto: string;
+  imagen_url: string;
+  precio: string;
+}
+
 const MarcasScreen = () => {
   const router = useRouter();
-  const [tiendas, setTiendas] = useState([]); 
-  const [productos, setProductos] = useState([]); 
+  const [tiendas, setTiendas] = useState<Tienda[]>([]); 
+  const [productos, setProductos] = useState<Producto[]>([]); 
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
@@ -22,7 +35,7 @@ const MarcasScreen = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState<Producto | null>(null);
   const [quantity, setQuantity] = useState(1);
 
   // Función para cargar tiendas y productos con paginación
@@ -62,7 +75,7 @@ const MarcasScreen = () => {
   }, [selectedCategory, searchQuery]);
 
   // Abrir modal de producto
-  const openModal = (producto) => {
+  const openModal = (producto: Producto) => {
     setSelectedProduct(producto);
     setQuantity(1);
     setModalVisible(true);
@@ -79,7 +92,7 @@ const MarcasScreen = () => {
 
   const renderFooter = () => (!loading ? null : <ActivityIndicator size="large" color="#0000ff" />);
 
-  const renderTienda = ({ item }) => (
+  const renderTienda = ({ item }: { item: Tienda }) => (
     <Pressable style={MarcasStyles.tiendaContainer} onPress={() => router.push({ pathname: "../Herramientas/catalogo", params: { tienda: item.nombre_tienda } })}>
       <Text style={MarcasStyles.tiendaNombre}>🏬 {item.nombre_tienda}</Text>
       <Text style={MarcasStyles.tiendaHorarios}>🕒 {item.horarios}</Text>
@@ -88,7 +101,7 @@ const MarcasScreen = () => {
     </Pressable>
   );
 
-  const renderProducto = ({ item }) => (
+  const renderProducto = ({ item }: { item: Producto }) => (
     <Pressable style={ProductStyles.productContainer} onPress={() => openModal(item)}>
       <Image source={{ uri: item.imagen_url }} style={ProductStyles.productImage} />
       <Text style={ProductStyles.productName}>{item.nombre_producto}</Text>
