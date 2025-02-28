@@ -9,10 +9,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const CarritoScreen = () => {
   const { cart, updateQuantity, removeFromCart } = useCart();
   const router = useRouter();
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
 
   // Función para manejar la actualización de cantidad
-  const handleUpdateQuantity = (nombre_producto: string, cantidad: number) => {
+  const handleUpdateQuantity = (nombre_producto, cantidad) => {
     if (cantidad < 1) {
       Alert.alert(
         "Cantidad mínima",
@@ -29,7 +29,7 @@ const CarritoScreen = () => {
 
   // Calcular el total y el envío
   const getTotal = () => {
-    const total = cart.reduce((sum: number, item: { precio: number; cantidad: number }) => sum + item.precio * item.cantidad, 0);
+    const total = cart.reduce((sum, item) => sum + item.precio * item.cantidad, 0);
     const shipping = 30; // Costo de envío fijo
     return { total, shipping, subtotal: total + shipping };
   };

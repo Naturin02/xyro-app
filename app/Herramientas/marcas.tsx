@@ -101,7 +101,7 @@ const MarcasScreen = () => {
     </Pressable>
   );
 
-  const renderProducto = ({ item }: { item: Producto }) => (
+  const renderProducto = ({ item }) => (
     <Pressable style={ProductStyles.productContainer} onPress={() => openModal(item)}>
       <Image source={{ uri: item.imagen_url }} style={ProductStyles.productImage} />
       <Text style={ProductStyles.productName}>{item.nombre_producto}</Text>

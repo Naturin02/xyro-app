@@ -11,7 +11,8 @@ export const MarcasStyles = StyleSheet.create({
     marginBottom: 10, // Reducir espacio entre el buscador y el listado
   },
   flatListContainer: {
-    paddingBottom: 50, // Reducir espacio en la parte inferior
+    paddingHorizontal: 16,
+    paddingBottom: 50,
   },
   header: {
     backgroundColor: '#000', // Cambiado de '#007AFF' a '#000'
@@ -46,31 +47,36 @@ export const MarcasStyles = StyleSheet.create({
   // Estilos para las tiendas (se mantienen)
   // ------------------------------
   tiendaContainer: {
-    padding: 10, // Reducir padding
-    marginHorizontal: 12,
-    borderRadius: 8, // Hacer botones más pequeños
-    backgroundColor: Color.colorSnow,
+    backgroundColor: Color.colorWhite,
+    borderRadius: 12,
+    marginBottom: 16,
+    padding: 12,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2, // Para Android
-    borderBottomWidth: 1, // Línea de separación
-    borderBottomColor: Color.colorBlack, // Línea negra
-    marginBottom: 10, // Reducir margen inferior entre las tiendas
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 3,
+    borderBottomWidth: 0, // Removemos la línea negra
   },
   tiendaImagen: {
     width: "100%",
-    height: 120, // Tamaño ajustado para imagen de la tienda
+    height: 150,
     borderRadius: 8,
-    marginBottom: 5,
+    marginBottom: 8,
   },
   tiendaNombre: {
-    fontSize: FontSize.size_smi, // Reducir el tamaño del texto
+    fontSize: FontSize.size_lg,
+    fontFamily: FontFamily.juaRegular,
+    color: Color.colorBlack,
+    marginBottom: 4,
+    textAlign: "left", // Alineación a la izquierda
+  },
+  tiendaPrecio: {
+    fontSize: FontSize.size_base,
     fontFamily: FontFamily.juaRegular,
     color: Color.colorBlack,
     fontWeight: "bold",
-    textAlign: "center",
+    marginTop: 4,
   },
   tiendaHorarios: {
     fontSize: FontSize.size_smi,
