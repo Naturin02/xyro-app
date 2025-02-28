@@ -8,11 +8,11 @@ import FooterNavigation from "../Componentes/FooterNavigation";
 import { backend } from "@/context/endpoints"; // URL del backend
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const { width, height } = Dimensions.get("window"); // Obtener las dimensiones de la pantalla
+const { width } = Dimensions.get("window"); // Obtener las dimensiones de la pantalla
 
-const ProductGrid = ({ category }) => {  // Recibimos la categoría como prop
+const ProductGrid = ({ category }) => {
   const [products, setProducts] = useState([]);
-  const [searchQuery, setSearchQuery] = useState(''); // Para manejar la búsqueda
+  const [searchQuery, setSearchQuery] = useState('');
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [modalVisible, setModalVisible] = useState(false);
@@ -27,20 +27,19 @@ const ProductGrid = ({ category }) => {  // Recibimos la categoría como prop
 
   useEffect(() => {
     if (!tienda) return;
-    setProducts([]); // Reiniciar productos al cambiar de tienda
+    setProducts([]);
     setPage(1);
     setHasMore(true);
     loadProducts(1, true);
-  }, [tienda, category]);  // Ahora también depende de la categoría seleccionada
+  }, [tienda, category]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       if (searchQuery) {
-        loadProducts(1, true); // Hacer la búsqueda al terminar de escribir
+        loadProducts(1, true);
       }
-    }, 500); // Espera 500ms después de dejar de escribir
-
-    return () => clearTimeout(timer); // Limpiar el timeout cuando el componente se desmonta o el query cambia
+    }, 500);
+    return () => clearTimeout(timer);
   }, [searchQuery]);
 
   const loadProducts = async (pageNumber, reset = false) => {
@@ -65,23 +64,10 @@ const ProductGrid = ({ category }) => {  // Recibimos la categoría como prop
     }
   };
 
-  const openModal = (product) => {
-    setSelectedProduct(product);
-    setQuantity(1);
-    setModalVisible(true);
-  };
-
-  const addProductToCart = () => {
-    if (selectedProduct) {
-      addToCart(selectedProduct, quantity);
-      setModalVisible(false);
-    }
-  };
-
   const renderItem = ({ item }) => (
     <View style={ProductStyles.productContainer}>
-      <TouchableOpacity style={ProductStyles.productCard} onPress={() => openModal(item)}>
-        <Image source={{ uri: item.imagen_url }} style={ProductStyles.productImage} />
+      <TouchableOpacity style={ProductStyles.productCard} onPress={() => setSelectedProduct(item)}>
+        <Image source={{ uri: item.imagen_url || `${backend}/images/default.png` }} style={ProductStyles.productImage} />
         <Text style={ProductStyles.productName}>{item.nombre_producto}</Text>
         <Text style={ProductStyles.productPrice}>💲 {parseFloat(item.precio).toFixed(2)}</Text>
       </TouchableOpacity>
@@ -90,7 +76,6 @@ const ProductGrid = ({ category }) => {  // Recibimos la categoría como prop
 
   return (
     <View style={{ flex: 1 }}>
-      {/* Header fuera del SafeAreaView para mostrar la información del notch */}
       <View style={ProductStyles.headerContainer}>
         <View style={ProductStyles.header}>
           <Pressable onPress={() => router.back()} style={ProductStyles.exitButton}>
@@ -103,7 +88,7 @@ const ProductGrid = ({ category }) => {  // Recibimos la categoría como prop
             onChangeText={setSearchQuery}
             onSubmitEditing={() => loadProducts(1, true)}
           />
-          <Pressable onPress={() => router.push("/Carrito/carrito")}>
+          <Pressable onPress={() => router.push("/Carrito/carrito")}> 
             <Ionicons name="cart-outline" size={28} color="white" />
             {cart.length > 0 && (
               <View style={ProductStyles.cartBadge}>
@@ -120,93 +105,16 @@ const ProductGrid = ({ category }) => {  // Recibimos la categoría como prop
           behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
           <View style={ProductStyles.container}>
-            {/* Título de la sección Explore */}
-            <Text style={ProductStyles.sectionTitle}>Explore</Text>
-
-            {/* Lista de productos */}
-            {products.length === 0 && !loading ? (
-              <Text style={ProductStyles.noProductsText}>
-                ❌ No hay productos disponibles
-              </Text>
-            ) : (
-              <FlatList
-                data={products}
-                renderItem={renderItem}
-                keyExtractor={(item) => item.id?.toString() || Math.random().toString()}
-                numColumns={width > 600 ? 3 : 2}
-                contentContainerStyle={ProductStyles.productList}
-                onEndReached={() => loadProducts(page)}
-                onEndReachedThreshold={0.2}
-                ListFooterComponent={loading ? <ActivityIndicator size="large" color="#0000ff" /> : null}
-              />
-            )}
-
-            {/* Modal de vista detallada del producto */}
-            <Modal visible={modalVisible} transparent={false} animationType="slide">
-              <View style={ProductStyles.modalContainer}>
-                <View style={ProductStyles.modalContent}>
-                  {/* Botón de cerrar modal */}
-                  <Pressable onPress={() => setModalVisible(false)} style={ProductStyles.closeButton}>
-                    <Ionicons name="close-circle" size={30} color="white" />
-                  </Pressable>
-
-                  {/* Imagen del producto */}
-                  <Image source={{ uri: selectedProduct?.imagen_url }} style={ProductStyles.modalProductImage} />
-                  <Text style={ProductStyles.modalProductName}>{selectedProduct?.nombre_producto}</Text>
-                  <Text style={ProductStyles.modalProductPrice}>💲 {parseFloat(selectedProduct?.precio).toFixed(2)}</Text>
-
-                  {/* Calificación del producto */}
-                  <View style={ProductStyles.ratingContainer}>
-                    <Text style={ProductStyles.rating}>⭐ {selectedProduct?.rating || 'No rating'}</Text>
-                  </View>
-
-                  {/* Opciones de color */}
-                  {selectedProduct?.colores && (
-                    <Text style={ProductStyles.colorOption}>Color options: {selectedProduct.colores.join(", ")}</Text>
-                  )}
-
-                  {/* Contenedor de cantidad */}
-                  <View style={ProductStyles.quantityContainer}>
-                    <Pressable onPress={() => setQuantity(Math.max(1, quantity - 1))} style={ProductStyles.quantityButton}>
-                      <Ionicons name="remove-circle-outline" size={30} color="white" />
-                    </Pressable>
-
-                    <Text style={{ fontSize: 20, fontWeight: "bold" }}>{quantity}</Text>
-
-                    <Pressable
-                      onPress={() => {
-                        if (quantity < selectedProduct?.stock) {
-                          setQuantity(quantity + 1);
-                        } else {
-                          setAlertVisible(true);
-                        }
-                      }}
-                      style={ProductStyles.quantityButton}
-                    >
-                      <Ionicons name="add-circle-outline" size={30} color="white" />
-                    </Pressable>
-                  </View>
-
-                  {/* Botón para agregar al carrito */}
-                  <Pressable style={ProductStyles.addToCartButton} onPress={addProductToCart}>
-                    <Text style={ProductStyles.addToCartButtonText}>Añadir producto</Text>
-                  </Pressable>
-                </View>
-              </View>
-            </Modal>
-
-            {/* Modal de alerta */}
-            <Modal visible={alertVisible} transparent={true} animationType="fade">
-              <View style={ProductStyles.modalContainer}>
-                <View style={ProductStyles.alertBox}>
-                  <Text style={ProductStyles.alertTitle}>❌ Stock insuficiente</Text>
-                  <Text style={ProductStyles.alertMessage}>No puedes agregar más productos, ya alcanzaste el stock disponible.</Text>
-                  <Pressable style={ProductStyles.alertButton} onPress={() => setAlertVisible(false)}>
-                    <Text style={ProductStyles.alertButtonText}>Entendido</Text>
-                  </Pressable>
-                </View>
-              </View>
-            </Modal>
+            <FlatList
+              data={products}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.id?.toString() || Math.random().toString()}
+              numColumns={width > 600 ? 3 : 2}
+              contentContainerStyle={ProductStyles.productList}
+              onEndReached={() => loadProducts(page)}
+              onEndReachedThreshold={0.2}
+              ListFooterComponent={loading ? <ActivityIndicator size="large" color="#0000ff" /> : null}
+            />
           </View>
         </KeyboardAvoidingView>
       </SafeAreaView>
