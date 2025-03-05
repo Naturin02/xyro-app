@@ -71,7 +71,7 @@ export const ProductStyles = StyleSheet.create({
     borderColor: Color.colorBlack,
   },
   categoryButtonActive: {
-    backgroundColor: Color.colorGray_100, // Corrected to use an existing color
+    backgroundColor: Color.colorLightBlue,
   },
   categoryButtonText: {
     fontSize: FontSize.size_smi,
@@ -197,7 +197,7 @@ export const ProductStyles = StyleSheet.create({
   },
   rating: {
     fontSize: 16,
-    color: "#FFD700", // Color dorado
+    color: Color.colorGold,
     marginTop: 5,
   },
   colorOption: {

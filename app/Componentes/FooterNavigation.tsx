@@ -5,48 +5,44 @@ import { FooterNavigationStyle } from "../Styles/FooterNavigationStyle"; // Aseg
 
 const FooterNavigation = () => {
   const router = useRouter(); // Inicializa el hook de navegación
-  const [activeTab, setActiveTab] = useState("tienda"); // Estado para controlar el tab activo
+  const [activeTab, setActiveTab] = useState("marcas"); // Estado para controlar el tab activo
 
   return (
     <View style={FooterNavigationStyle.footer}>
       <Pressable
-        style={[
-          FooterNavigationStyle.footerItem,
-          activeTab === "marcas" && FooterNavigationStyle.activeButton, // Si la sección es activa, aplica el estilo
-        ]}
+        style={FooterNavigationStyle.footerItem}
         onPress={() => {
-          setActiveTab("marcas"); // Cambiar solo el estado para hacer el botón activo
-          router.push("/Herramientas/marcas"); // Navegar a la ruta de Tienda
+          setActiveTab("marcas");
+          router.push("/Herramientas/marcas");
         }}
       >
-        <Text
-          style={[
-            FooterNavigationStyle.footerText,
-            activeTab === "marcas" && FooterNavigationStyle.activeText, // Si la sección es activa, cambia el color del texto
-          ]}
-        >
-          🏷️ Tienda
-        </Text>
+        <Text style={[
+          FooterNavigationStyle.footerIcon,
+          activeTab === "marcas" && FooterNavigationStyle.activeIcon
+        ]}>🏠</Text>
+        <Text style={[
+          FooterNavigationStyle.footerText,
+          activeTab === "marcas" && FooterNavigationStyle.activeItem
+        ]}>Tiendas</Text>
       </Pressable>
 
+
+
       <Pressable
-        style={[
-          FooterNavigationStyle.footerItem,
-          activeTab === "cuenta" && FooterNavigationStyle.activeButton, // Si la sección es activa, aplica el estilo
-        ]}
+        style={FooterNavigationStyle.footerItem}
         onPress={() => {
-          setActiveTab("cuenta"); // Cambiar solo el estado para hacer el botón activo
-          router.push("/Herramientas/cuenta"); // Navegar a la ruta de Cuenta
+          setActiveTab("cuenta");
+          router.push("/Herramientas/cuenta");
         }}
       >
-        <Text
-          style={[
-            FooterNavigationStyle.footerText,
-            activeTab === "cuenta" && FooterNavigationStyle.activeText, // Si la sección es activa, cambia el color del texto
-          ]}
-        >
-          👤 Cuenta
-        </Text>
+        <Text style={[
+          FooterNavigationStyle.footerIcon,
+          activeTab === "cuenta" && FooterNavigationStyle.activeIcon
+        ]}>👤</Text>
+        <Text style={[
+          FooterNavigationStyle.footerText,
+          activeTab === "cuenta" && FooterNavigationStyle.activeItem
+        ]}>Cuenta</Text>
       </Pressable>
     </View>
   );
