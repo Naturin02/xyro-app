@@ -1,5 +1,4 @@
 const Stack = createNativeStackNavigator();
-import "nativewind/css";
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { useFonts } from "expo-font";
@@ -104,7 +103,6 @@ const App = () => {
               component={VerificacionDeCorreo2}
               options={{ headerShown: false }}
             />
-            
           </Stack.Navigator>
         ) : null}
       </NavigationContainer>

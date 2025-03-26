@@ -1,3 +1,4 @@
+// C:\Users\shiro\OneDrive\Escritorio\Exp\xyro-app\app\Styles\registroStyle.ts
 import { StyleSheet } from "react-native";
 import { Color, FontFamily, FontSize, Border } from "../../constants/GlobalStyles"; // Ruta correcta
 
@@ -66,7 +67,7 @@ export const registroStyles = StyleSheet.create({
     flexShrink: 1,
   },
   registerButton: {
-    backgroundColor: "#70E099",  // Color de fondo actualizado al color que solicitaste
+    backgroundColor: Color.colorBlack,
     paddingVertical: 15,
     paddingHorizontal: 40,
     borderRadius: Border.br_9xs,

@@ -1,219 +1,97 @@
-import { StyleSheet, Platform, Dimensions } from "react-native";
-import { Color, FontFamily, FontSize } from "../../constants/GlobalStyles"; // Ajusta la ruta si es necesario
-
-const { width, height } = Dimensions.get("window");
+import { StyleSheet, Platform } from "react-native";
+import { Color, FontFamily, FontSize } from "../../constants/GlobalStyles"; // Asegúrate de que la ruta sea correcta
 
 export const MarcasStyles = StyleSheet.create({
-  // ** Contenedor principal **
   container: {
     flex: 1,
-    backgroundColor: "#F9F9F9", // Fondo neutro y profesional
-    paddingHorizontal: 10,
+    backgroundColor: Color.colorWhite,
+    paddingTop: 0, // Reducir el espacio superior aún más
   },
-
-  // ** Cabecera de la página **
+  spacer: {
+    marginBottom: 10, // Reducir espacio entre el buscador y el listado
+  },
+  flatListContainer: {
+    paddingBottom: 50, // Reducir espacio en la parte inferior
+  },
   header: {
-    backgroundColor: "#70E099",
-    paddingTop: Platform.OS === "ios" ? 50 : 20,
+    backgroundColor: '#000', // Cambiado de '#007AFF' a '#000'
+    paddingTop: Platform.OS === 'ios' ? 50 : 20, // Ajusta este valor según necesites
     paddingBottom: 10,
-    paddingHorizontal: 20,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    borderBottomWidth: 1,
-    borderBottomColor: "#444",
+    paddingHorizontal: 15,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
-
   logo: {
-    color: "#000",
+    color: '#fff',
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
-
   iconsContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 15,
   },
-
-  // ** Barra de búsqueda **
-  searchContainer: {
-    backgroundColor: "#EDEDED",
-    borderRadius: 10,
-    padding: 10,
-    flexDirection: "row",
-    alignItems: "center",
-    marginVertical: 10,
+  iconButton: {
+    marginLeft: 8, // Reducir espacio entre los íconos
   },
-
-  searchInput: {
-    color: "#000",
-    flex: 1,
-    marginLeft: 10,
+  cart: {
+    color: Color.colorWhite,
+    fontSize: FontSize.size_lg, // Reducir tamaño de los íconos
   },
-
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#000",
-    marginBottom: 10,
+  heart: {
+    color: Color.colorWhite,
+    fontSize: FontSize.size_lg, // Reducir tamaño de los íconos
   },
-
-  // ** Estilo de la lista de tiendas (No se modificó) **
-  tiendaGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between", // Separa más las tiendas horizontalmente
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-  },
-
+  // ------------------------------
+  // Estilos para las tiendas (se mantienen)
+  // ------------------------------
   tiendaContainer: {
-    backgroundColor: "#FFF", // Fondo limpio y profesional
-    borderRadius: 12, // Bordes más suaves
-    overflow: "hidden",
-    width: "44%", // Se reduce un poco para mayor espacio entre ellas
-    marginBottom: 20,
-    padding: 12,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 4, // Efecto de sombra en Android
-    marginHorizontal: 8, // Mayor separación entre tiendas
-  },
-
-  tiendaImage: {
-    width: "100%",
-    height: 120,
-    backgroundColor: "#E0E0E0",
-    borderRadius: 10,
-  },
-
-  tiendaInfo: {
-    marginTop: 10,
-    alignItems: "center",
-  },
-
-  tiendaNombre: {
-    fontSize: 14,
-    fontWeight: "bold",
-    color: "#333",
-    textAlign: "center",
-    marginBottom: 5,
-  },
-
-  tiendaDireccion: {
-    fontSize: 12,
-    color: "#666",
-    textAlign: "center",
-    marginBottom: 5,
-  },
-
-  tiendaDescripcion: {
-    fontSize: 12,
-    color: "#777",
-    textAlign: "center",
-  },
-
-  tiendaRating: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginTop: 5,
-  },
-
-  // ** Estilos para el modal (actualizados según tu ejemplo) **
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.6)", // Fondo oscuro semitransparente
-  },
-  modalContent: {
-    backgroundColor: "#fff",
-    padding: 20,
-    borderRadius: 24, // Bordes redondeados como en el ejemplo de CategoryStyle
-    alignItems: "center",
-    width: width * 0.85,
-    maxHeight: height * 0.8, // Asegura que el modal no ocupe más del 80% de la pantalla
-    overflow: "hidden", // Asegura que el contenido no se desborde
-  },
-  closeButton: {
-    position: "absolute",
-    top: 12,
-    right: 12,
-    zIndex: 10,
-    backgroundColor: "rgba(255, 255, 255, 0.9)", // Fondo blanco para el botón de cierre
-    borderRadius: 20,
-    padding: 4,
-  },
-  modalProductImage: {
-    width: "100%",
-    height: 220,
-    borderRadius: 10,
-    marginBottom: 15,
-  },
-  modalProductName: {
-    fontSize: 22,
-    fontWeight: "700",
-    color: "#333",
-    marginBottom: 8,
-    textAlign: "center",
-  },
-  modalProductPrice: {
-    fontSize: 24,
-    fontWeight: "800",
-    color: "#4CAF50",
-    marginBottom: 20,
-    textAlign: "center",
-  },
-
-  // ** Estilos para la lista de productos **
-  productList: {
-    paddingHorizontal: 8,
-    paddingBottom: 80,
-  },
-  productContainer: {
-    width: "50%", // Dos productos por fila
-    paddingHorizontal: 8,
-    marginBottom: 16,
-  },
-  productCard: {
-    backgroundColor: "#fff",
-    borderRadius: 16,
-    overflow: "hidden",
+    padding: 10, // Reducir padding
+    marginHorizontal: 12,
+    borderRadius: 8, // Hacer botones más pequeños
+    backgroundColor: Color.colorSnow,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
-    marginBottom: 10,
+    elevation: 2, // Para Android
+    borderBottomWidth: 1, // Línea de separación
+    borderBottomColor: Color.colorBlack, // Línea negra
+    marginBottom: 10, // Reducir margen inferior entre las tiendas
   },
-
-  productImage: {
+  tiendaImagen: {
     width: "100%",
-    height: 120,
-    borderRadius: 10,
+    height: 120, // Tamaño ajustado para imagen de la tienda
+    borderRadius: 8,
+    marginBottom: 5,
   },
-
-  productInfo: {
-    marginTop: 10,
-    alignItems: "center",
-  },
-
-  productName: {
-    fontSize: 14,
+  tiendaNombre: {
+    fontSize: FontSize.size_smi, // Reducir el tamaño del texto
+    fontFamily: FontFamily.juaRegular,
+    color: Color.colorBlack,
     fontWeight: "bold",
-    color: "#000",
     textAlign: "center",
   },
-
-  productPrice: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#4CAF50",
+  tiendaHorarios: {
+    fontSize: FontSize.size_smi,
+    fontFamily: FontFamily.juaRegular,
+    color: Color.colorDarkslategray,
+    marginTop: 3,
     textAlign: "center",
-    marginTop: 4,
+  },
+  tiendaDireccion: {
+    fontSize: FontSize.size_smi,
+    fontFamily: FontFamily.juaRegular,
+    color: Color.colorDarkslategray,
+    marginTop: 3,
+    textAlign: "center",
+  },
+  tiendaDescripcion: {
+    fontSize: FontSize.size_smi,
+    fontFamily: FontFamily.juaRegular,
+    color: Color.colorDarkslategray,
+    marginTop: 3,
+    textAlign: "center",
   },
 });
 

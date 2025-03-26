@@ -1,25 +1,19 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
+import React, { createContext, useState, useContext } from "react";
 
+// Creamos el contexto del carrito
 const CartContext = createContext();
 
+// Proveedor del carrito para envolver la app
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
-  const [totalItems, setTotalItems] = useState(0);
 
-  const calculateTotalItems = (cart) => {
-    return cart.reduce((acc, item) => acc + item.cantidad, 0);
-  };
-
-  useEffect(() => {
-    setTotalItems(calculateTotalItems(cart));
-  }, [cart]);
-
+  // Función para añadir productos al carrito
   const addToCart = (producto, cantidad) => {
     setCart((prevCart) => {
-      const existe = prevCart.find((item) => item.id === producto.id);
+      const existe = prevCart.find((item) => item.nombre_producto === producto.nombre_producto);
       if (existe) {
         return prevCart.map((item) =>
-          item.id === producto.id
+          item.nombre_producto === producto.nombre_producto
             ? { ...item, cantidad: item.cantidad + cantidad }
             : item
         );
@@ -28,29 +22,26 @@ export const CartProvider = ({ children }) => {
     });
   };
 
-  const updateQuantity = (id, cantidad) => {
+  // Función para actualizar cantidades
+  const updateQuantity = (nombre_producto, cantidad) => {
     setCart((prevCart) =>
       prevCart.map((item) =>
-        item.id === id ? { ...item, cantidad } : item
+        item.nombre_producto === nombre_producto ? { ...item, cantidad } : item
       )
     );
   };
 
-  const removeFromCart = (id) => {
-    setCart((prevCart) => prevCart.filter((item) => item.id !== id));
-  };
-
-  const clearCart = () => {
-    setCart([]);
+  // Función para eliminar productos
+  const removeFromCart = (nombre_producto) => {
+    setCart((prevCart) => prevCart.filter((item) => item.nombre_producto !== nombre_producto));
   };
 
   return (
-    <CartContext.Provider
-      value={{ cart, addToCart, updateQuantity, removeFromCart, totalItems, clearCart }}
-    >
+    <CartContext.Provider value={{ cart, addToCart, updateQuantity, removeFromCart }}>
       {children}
     </CartContext.Provider>
   );
 };
 
+// Hook para acceder al carrito desde cualquier componente
 export const useCart = () => useContext(CartContext);

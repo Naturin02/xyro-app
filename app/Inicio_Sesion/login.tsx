@@ -1,19 +1,9 @@
 import React, { useState } from "react";
-import {
-  Image,
-  View,
-  Pressable,
-  Text,
-  TextInput,
-  Modal,
-  Animated,
-  Alert,
-} from "react-native";
+import { Image, View, Pressable, Text, TextInput, Modal, Animated, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { loginStyles } from "../Styles/loginStyle"; // Ruta corregida a loginStyle.ts
 import { backend } from "@/context/endpoints"; // Importamos el backend desde el contexto
 import { FontFamily, FontSize, Color } from "../../constants/GlobalStyles"; // Estilos globales
-import api from "../../context/api"; // Importamos la instancia de axios
 
 const LoginScreen = () => {
   const router = useRouter();
@@ -31,16 +21,16 @@ const LoginScreen = () => {
     }
 
     try {
-      const response = await api.post(`/usuarios/login`, {
-        correo: email,
-        contrasena: password,
+      const response = await fetch(`${backend}/api/usuarios/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ correo: email, contrasena: password }),
       });
 
-      const data = response.data;
-      console.log("📌 Respuesta del servidor:", response);
+      const data = await response.json();
       console.log("📌 Respuesta del servidor:", data);
 
-      if (response.status === 200) {
+      if (response.ok) {
         showModal(); // 🔹 Mostramos el modal de éxito
         setTimeout(() => {
           router.replace("/Herramientas/marcas"); // Redirigimos a la pantalla principal
@@ -50,7 +40,6 @@ const LoginScreen = () => {
       }
     } catch (error) {
       console.error("❌ Error en el inicio de sesión:", error);
-      console.log("❌ Error en el inicio de sesión:", error);
       Alert.alert("Error", "Hubo un problema con el inicio de sesión");
     }
   };

@@ -1,141 +1,113 @@
-import { StyleSheet, Platform } from "react-native";
-import { Color, FontFamily, FontSize } from "../../constants/GlobalStyles";
+import React, { useState } from "react";
+import { View, Text, Pressable, Alert, TextInput, Modal, Platform, KeyboardAvoidingView } from "react-native";
+import { useRouter } from "expo-router";
+import { CuentaStyles } from "../Styles/cuentaStyle";
+import FooterNavigation from "../Componentes/FooterNavigation";
+import { Ionicons } from "@expo/vector-icons";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-export const CuentaStyles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Color.colorWhite,
-    paddingHorizontal: 20,
-  },
+const CuentaScreen = () => {
+  const router = useRouter();
+  const [password, setPassword] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
 
-  /** HEADER **/
-  header: {
-    backgroundColor: "#000",
-    paddingTop: Platform.OS === "ios" ? 50 : 25,
-    paddingBottom: 15,
-    paddingHorizontal: 20,
-    flexDirection: "row",
-    justifyContent: "center", // Centra los elementos en el eje horizontal
-    alignItems: "center",
-    borderBottomWidth: 1,
-    borderBottomColor: "#333",
-    elevation: 3,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-  },
+  const handleDeleteAccount = () => {
+    setModalVisible(true);
+  };
 
-  headerTitle: {
-    fontSize: FontSize.size_xl,
-    fontFamily: FontFamily.juaRegular,
-    fontWeight: "bold",
-    color: "#fff",
-    textAlign: "center", // Asegura que el texto se centre
-    flex: 1, // Expande el título para ocupar el espacio disponible y centrarlo
-  },
+  const confirmDeleteAccount = () => {
+    if (password.trim() === "") {
+      Alert.alert("Error", "Debes ingresar tu contraseña para continuar.");
+    } else {
+      setModalVisible(false);
+      router.replace("/Inicio_Sesion/login");
+    }
+  };
 
-  /** SECCIÓN DE USUARIO **/
-  userContainer: {
-    backgroundColor: Color.colorWhite,
-    alignItems: "center",
-    paddingVertical: 20, 
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    marginBottom: 15, 
-    elevation: 2,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-  },
+  return (
+    <View style={{ flex: 1 }}>
+      {/* Header fuera del SafeAreaView para mostrar la información del notch */}
+      <View style={CuentaStyles.header}>
+        <Pressable onPress={() => router.back()}>
+          <Ionicons name="arrow-back" size={28} color="#333" />
+        </Pressable>
+        <Text style={CuentaStyles.headerTitle}>Mi cuenta</Text>
+        <Pressable onPress={() => alert("Carrito")}>
+          <Ionicons name="cart-outline" size={28} color="#333" />
+        </Pressable>
+      </View>
 
-  userAvatar: {
-    width: 100, 
-    height: 100,
-    borderRadius: 50, 
-    backgroundColor: "#ccc", 
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 17,
-  },
+      <SafeAreaView style={{ flex: 1 }}>
+        <KeyboardAvoidingView 
+          style={{ flex: 1 }} 
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
+          <View style={CuentaStyles.container}>
+            {/* Mensaje de bienvenida */}
+            <View style={CuentaStyles.userContainer}>
+              <Text style={CuentaStyles.userText}>¡Hola!</Text>
+            </View>
 
-  userIcon: {
-    width: 90, 
-    height: 90, 
-    borderRadius: 45, 
-  },
+            {/* Opciones de cuenta */}
+            <Pressable style={CuentaStyles.optionButton} onPress={() => alert("Mis pedidos")}>
+              <Text style={CuentaStyles.optionText}>Mis pedidos</Text>
+            </Pressable>
+            
+            <Pressable style={CuentaStyles.optionButton} onPress={() => router.push("/Herramientas/datosPersonales")}>
+              <Text style={CuentaStyles.optionText}>Mis datos</Text>
+            </Pressable>
 
-  userText: {
-    fontSize: FontSize.size_lg,
-    fontFamily: FontFamily.juaRegular,
-    color: "#333",
-    fontWeight: "bold",
-    marginTop: 3, 
-  },
+            <Pressable style={CuentaStyles.optionButton} onPress={() => alert("Devoluciones")}> 
+              <Text style={CuentaStyles.optionText}>Devoluciones</Text>
+            </Pressable>
 
-  /** CONTENEDOR DE OPCIONES **/
-  optionsContainer: {
-    flex: 1, 
-    justifyContent: "flex-end", 
-    marginBottom: 40, 
-  },
+            {/* Botón de cerrar sesión */}
+            <Pressable style={CuentaStyles.logoutButton} onPress={() => router.replace("/Inicio_Sesion/login")}> 
+              <Text style={CuentaStyles.logoutButtonText}>Cerrar Sesión</Text>
+            </Pressable>
 
-  optionButton: {
-    width: "100%",
-    paddingVertical: 10, 
-    backgroundColor: "#000",
-    borderRadius: 8, 
-    alignItems: "center",
-    marginVertical: 5, 
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-    elevation: 2,
-  },
+            {/* Botón para eliminar cuenta */}
+            <Pressable style={CuentaStyles.deleteButton} onPress={handleDeleteAccount}> 
+              <Text style={CuentaStyles.deleteButtonText}>Eliminar Cuenta</Text>
+            </Pressable>
 
-  optionText: {
-    fontSize: FontSize.size_sm, 
-    fontFamily: FontFamily.juaRegular,
-    color: "#fff",
-    fontWeight: "bold",
-  },
+            {/* Modal para confirmar eliminación de cuenta */}
+            <Modal
+              animationType="fade"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={() => setModalVisible(false)}
+            >
+              <View style={CuentaStyles.modalOverlay}>
+                <View style={CuentaStyles.modalContainer}>
+                  <Text style={CuentaStyles.modalTitle}>Confirmar Eliminación</Text>
+                  <Text style={CuentaStyles.modalText}>Ingresa tu contraseña para eliminar tu cuenta:</Text>
+                  <TextInput
+                    style={CuentaStyles.input}
+                    placeholder="Contraseña"
+                    secureTextEntry
+                    value={password}
+                    onChangeText={setPassword}
+                  />
+                  <View style={CuentaStyles.modalButtons}>
+                    <Pressable style={CuentaStyles.cancelButton} onPress={() => setModalVisible(false)}>
+                      <Text style={CuentaStyles.cancelButtonText}>Cancelar</Text>
+                    </Pressable>
+                    <Pressable style={CuentaStyles.confirmButton} onPress={confirmDeleteAccount}>
+                      <Text style={CuentaStyles.confirmButtonText}>Eliminar</Text>
+                    </Pressable>
+                  </View>
+                </View>
+              </View>
+            </Modal>
+          </View>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
 
-  /** BOTÓN DE CERRAR SESIÓN **/
-  logoutButton: {
-    width: "100%",
-    paddingVertical: 10, 
-    backgroundColor: "#000",
-    borderRadius: 8,
-    alignItems: "center",
-    marginTop: 12, 
-  },
+      {/* Footer de navegación */}
+      <FooterNavigation />
+    </View>
+  );
+};
 
-  logoutButtonText: {
-    fontSize: FontSize.size_sm, 
-    fontFamily: FontFamily.juaRegular,
-    color: "#fff",
-    fontWeight: "bold",
-  },
-
-  /** BOTÓN DE ELIMINAR CUENTA **/
-  deleteButton: {
-    width: "100%",
-    paddingVertical: 10, 
-    borderWidth: 1,
-    borderColor: "red",
-    borderRadius: 8,
-    alignItems: "center",
-    marginTop: 12, 
-  },
-
-  deleteButtonText: {
-    fontSize: FontSize.size_sm, 
-    fontFamily: FontFamily.juaRegular,
-    color: "red",
-    fontWeight: "bold",
-  },
-});
-
-export default CuentaStyles;
+export default CuentaScreen;

@@ -1,40 +1,63 @@
 import { StyleSheet } from "react-native";
-import { Color, FontFamily, FontSize } from "../../constants/GlobalStyles";
+import { Color, FontFamily, FontSize } from "../../constants/GlobalStyles"; // Asegúrate de que la ruta sea correcta
 
 export const FooterNavigationStyle = StyleSheet.create({
   footer: {
     position: "absolute",
-    bottom: 25, // Mantenerlo un poco arriba del borde inferior
-    left: "10%", // Ajustar la distancia desde el borde izquierdo
-    right: "10%", // Ajustar la distancia desde el borde derecho
-    height: 65, // Reducir la altura del footer
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 70,
     backgroundColor: Color.colorWhite,
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    borderRadius: 30, // Bordes redondeados en todos los lados
-    paddingHorizontal: 10, // Reducir el espaciado horizontal
-    paddingVertical: 5, // Reducir el espaciado vertical
-    shadowColor: "black",
-    shadowOffset: { width: 0, height: 4 },
+    borderTopWidth: 1,
+    borderColor: "#ddd",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: -2 },
     shadowOpacity: 0.1,
     shadowRadius: 6,
-    elevation: 5,
+    elevation: 6, // Añadimos una elevación para crear profundidad
+    paddingHorizontal: 15,
   },
   footerItem: {
     alignItems: "center",
+    paddingVertical: 10,
+    flexDirection: "row",
     justifyContent: "center",
-  },
-  footerIcon: {
-    fontSize: 16, // Reducir el tamaño del ícono
-    color: Color.colorBlack,
   },
   footerText: {
     fontSize: FontSize.size_sm,
     fontFamily: FontFamily.juaRegular,
-    color: "#aaa", // Color gris por defecto
-    marginTop: 3, // Reducir el espacio entre el ícono y el texto
+    color: Color.colorBlack,
+    marginTop: 5,
+    marginLeft: 8, // Añadimos espacio entre el ícono y el texto
+    transition: "color 0.3s", // Transición suave para el cambio de color
   },
-
-  
+  activeButton: {
+    backgroundColor: "#ff6347", // Fondo de botón activo en color rojo tomate
+    borderRadius: 30, // Bordes redondeados
+    paddingHorizontal: 18,
+    paddingVertical: 12,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 6,
+    transform: [{ scale: 1.05 }], // Efecto de ampliación sutil cuando está activo
+    transition: "background-color 0.3s, transform 0.2s", // Efecto de transición suave
+  },
+  activeText: {
+    color: Color.colorWhite, // Texto blanco cuando el botón está activo
+    fontWeight: "bold", // Negrita para resaltar más el texto
+    transition: "color 0.3s", // Transición suave para el cambio de color
+  },
+  footerItemInactive: {
+    opacity: 0.6, // Icono más tenue cuando no está activo
+  },
+  footerItemActive: {
+    opacity: 1, // Asegura que el ícono activo se vea con opacidad total
+    transform: [{ scale: 1.1 }], // Efecto de ampliación sutil en el ícono activo
+  },
 });

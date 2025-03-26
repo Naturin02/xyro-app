@@ -1,32 +1,15 @@
 import { StyleSheet, Platform } from "react-native";
 import { Color, FontFamily, FontSize } from "../../constants/GlobalStyles"; // Asegúrate de que la ruta sea correcta
 
-// Función recursiva que genera estilos comunes para los contenedores de elementos
-const createFavoritoContainerStyle = () => {
-  return {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: Color.colorSnow,
-    borderRadius: 10,
-    marginBottom: 16,
-    padding: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2, // Para Android
-  };
-};
-
 export const FavoritosStyles = StyleSheet.create({
-  // ** Cabecera de la pantalla **
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 10,
-    backgroundColor: '#70E099', // Color de fondo de la cabecera actualizado
+    backgroundColor: '#fff',
+    backgroundColor: '#000',
     paddingTop: Platform.OS === 'ios' ? 50 : 20,
     paddingBottom: 10,
     borderBottomWidth: 1,
@@ -46,8 +29,6 @@ export const FavoritosStyles = StyleSheet.create({
     flexDirection: 'row',
     gap: 15,
   },
-
-  // ** Contenedor principal **
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -63,10 +44,18 @@ export const FavoritosStyles = StyleSheet.create({
     flexGrow: 1,
     paddingBottom: 60,
   },
-
-  // ** Estilo para los favoritos **
   favoritoContainer: {
-    ...createFavoritoContainerStyle(), // Aplicando los estilos comunes para los favoritos
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: Color.colorSnow,
+    borderRadius: 10,
+    marginBottom: 16,
+    padding: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2, // Para Android
   },
   favoritoImage: {
     width: 100,
@@ -81,7 +70,7 @@ export const FavoritosStyles = StyleSheet.create({
     fontSize: FontSize.size_md,
     fontFamily: FontFamily.juaRegular,
     fontWeight: "bold",
-    color: '#70E099', // Color del nombre actualizado
+    color: Color.colorBlack,
   },
   favoritoDescripcion: {
     fontSize: FontSize.size_sm,
@@ -90,5 +79,6 @@ export const FavoritosStyles = StyleSheet.create({
     marginTop: 4,
   },
 });
+
 
 export default FavoritosStyles;

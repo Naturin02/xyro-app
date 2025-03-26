@@ -46,7 +46,7 @@ export const loginStyles = StyleSheet.create({
     color: Color.colorBlack,
   },
   loginButton: {
-    backgroundColor: "#70E099",  // Se cambió el color de fondo del botón
+    backgroundColor: Color.colorBlack,
     padding: 12,
     borderRadius: 8,
     alignItems: "center",
