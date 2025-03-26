@@ -23,10 +23,10 @@ const FavoritosScreen = () => {
     },
   ]);
 
-  const renderFavorito = ({ item }) => (
+  const renderFavorito = ({ item }: { item: { id: string; nombre: string; imagen: string; descripcion: string } }) => (
     <Pressable
       style={FavoritosStyles.favoritoContainer}
-      onPress={() => router.push({ pathname: "/DetallesProducto", params: { id: item.id } })} // Navegar al detalle del producto
+      onPress={() => router.push(`/DetallesProducto?id=${item.id}`)} // Navegar al detalle del producto
     >
       <Image source={{ uri: item.imagen }} style={FavoritosStyles.favoritoImage} />
       <View style={FavoritosStyles.favoritoDetails}>

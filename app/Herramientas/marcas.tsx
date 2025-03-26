@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { 
   View, Text, FlatList, Pressable, ActivityIndicator, 
-  KeyboardAvoidingView, Platform, Modal, Image, SafeAreaView 
+  KeyboardAvoidingView, Platform, Modal, Image, SafeAreaView, TextInput 
 } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, useNavigation } from "expo-router";
 import { MarcasStyles } from "../Styles/marcasStyle";
 import { ProductStyles } from "../Styles/CatalogoStyle"; // Estilos de productos
 import FooterNavigation from "../Componentes/FooterNavigation";
@@ -11,10 +11,24 @@ import CategoryNavigation from "../Componentes/CategoryNavigation";
 import { Ionicons } from "@expo/vector-icons"; 
 import { backend } from "@/context/endpoints";
 
+interface Tienda {
+  nombre_tienda: string;
+  horarios: string;
+  direccion: string;
+  descripcion: string;
+}
+
+interface Producto {
+  nombre_producto: string;
+  imagen_url: string;
+  precio: string;
+}
+
 const MarcasScreen = () => {
   const router = useRouter();
-  const [tiendas, setTiendas] = useState([]); 
-  const [productos, setProductos] = useState([]); 
+  const navigation = useNavigation();
+  const [tiendas, setTiendas] = useState<Tienda[]>([]); 
+  const [productos, setProductos] = useState<Producto[]>([]); 
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
@@ -22,8 +36,10 @@ const MarcasScreen = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState<Producto | null>(null);
   const [quantity, setQuantity] = useState(1);
+
+  const [selectedTienda, setSelectedTienda] = useState<string | null>(null);
 
   // Función para cargar tiendas y productos con paginación
   const loadTiendasYProductos = async () => {
@@ -62,7 +78,7 @@ const MarcasScreen = () => {
   }, [selectedCategory, searchQuery]);
 
   // Abrir modal de producto
-  const openModal = (producto) => {
+  const openModal = (producto: Producto) => {
     setSelectedProduct(producto);
     setQuantity(1);
     setModalVisible(true);
@@ -79,101 +95,130 @@ const MarcasScreen = () => {
 
   const renderFooter = () => (!loading ? null : <ActivityIndicator size="large" color="#0000ff" />);
 
-  const renderTienda = ({ item }) => (
-    <Pressable style={MarcasStyles.tiendaContainer} onPress={() => router.push({ pathname: "../Herramientas/catalogo", params: { tienda: item.nombre_tienda } })}>
-      <Text style={MarcasStyles.tiendaNombre}>🏬 {item.nombre_tienda}</Text>
-      <Text style={MarcasStyles.tiendaHorarios}>🕒 {item.horarios}</Text>
-      <Text style={MarcasStyles.tiendaDireccion}>📍 {item.direccion}</Text>
-      <Text style={MarcasStyles.tiendaDescripcion}>{item.descripcion}</Text>
+  const renderTienda = ({ item }: { item: Tienda }) => (
+    <Pressable 
+      style={MarcasStyles.tiendaCard} 
+      onPress={() => {
+        setSelectedTienda(item.nombre_tienda);
+        loadTiendasYProductos();
+      }}
+    >
+      <View style={MarcasStyles.tiendaImage}>
+        <Ionicons name="storefront-outline" size={40} color="#666666" style={{ alignSelf: 'center', marginTop: 40 }} />
+      </View>
+      <View style={MarcasStyles.tiendaInfo}>
+        <Text style={MarcasStyles.tiendaNombre}>{item.nombre_tienda}</Text>
+        <Text style={MarcasStyles.tiendaHorarios}>🕒 {item.horarios}</Text>
+        <Text style={MarcasStyles.tiendaDireccion}>📍 {item.direccion}</Text>
+      </View>
     </Pressable>
   );
 
-  const renderProducto = ({ item }) => (
-    <Pressable style={ProductStyles.productContainer} onPress={() => openModal(item)}>
-      <Image source={{ uri: item.imagen_url }} style={ProductStyles.productImage} />
-      <Text style={ProductStyles.productName}>{item.nombre_producto}</Text>
-      <Text style={ProductStyles.productPrice}>💲 {parseFloat(item.precio).toFixed(2)}</Text>
+  const renderProducto = ({ item }: { item: Producto }) => (
+    <Pressable style={MarcasStyles.productCard} onPress={() => openModal(item)}>
+      <Image 
+        source={{ uri: item.imagen_url }} 
+        style={MarcasStyles.productImage}
+        resizeMode="cover"
+      />
+      <View style={MarcasStyles.productInfo}>
+        <Text style={MarcasStyles.productName}>{item.nombre_producto}</Text>
+        <Text style={MarcasStyles.productPrice}>${parseFloat(item.precio).toFixed(2)}</Text>
+        <Pressable style={MarcasStyles.addButton}>
+          <Ionicons name="add" size={16} color="#FFFFFF" />
+        </Pressable>
+      </View>
     </Pressable>
   );
 
   return (
-    <View style={{ flex: 1 }}>
-      {/* Header fuera del SafeAreaView para mostrar la información del notch */}
-      <View style={MarcasStyles.header}>
-        <Text style={MarcasStyles.logo}>🛍️ Xyro</Text>
-        <View style={MarcasStyles.iconsContainer}>
-          <Pressable onPress={() => router.push("/Carrito/carrito")} style={MarcasStyles.iconButton}>
-            <Ionicons name="cart-outline" size={28} color="#fff" />
-          </Pressable>
-          <Pressable onPress={() => router.push("/Herramientas/favoritos")} style={MarcasStyles.iconButton}>
-            <Ionicons name="heart-outline" size={28} color="#fff" />
-          </Pressable>
-        </View>
-      </View>
-
+    <View style={{ flex: 1, backgroundColor: '#F5F7FA' }}>
       <SafeAreaView style={{ flex: 1 }}>
-        <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
-          <View style={MarcasStyles.container}>
-            {/* Buscador y Filtros */}
-            <CategoryNavigation onCategorySelect={setSelectedCategory} onSearchQueryChange={setSearchQuery} />
-
-            <View style={MarcasStyles.spacer}></View>
-
-            {/* Mostrar cantidad de tiendas disponibles solo si NO se selecciona categoría */}
-            {!selectedCategory && (
-              <Text style={{ textAlign: "center", fontSize: 18, fontWeight: "bold", marginVertical: 10 }}>
-                🏬 {filteredTiendas.length} Tiendas disponibles
-              </Text>
-            )}
-
-            {/* Mostrar tiendas o productos */}
-            {selectedCategory ? (
-              filteredProductos.length === 0 && !loading ? (
-                <Text style={{ textAlign: "center", marginTop: 20, fontSize: 16, color: "red" }}>❌ No hay productos disponibles</Text>
-              ) : (
-                <FlatList
-                  data={filteredProductos}
-                  keyExtractor={(item, index) => index.toString()}
-                  renderItem={renderProducto}
-                  ListFooterComponent={renderFooter}
-                  onEndReached={loadTiendasYProductos}
-                  onEndReachedThreshold={0.2}
-                  contentContainerStyle={ProductStyles.productList}
-                />
-              )
-            ) : (
-              filteredTiendas.length === 0 && !loading ? (
-                <Text style={{ textAlign: "center", marginTop: 20, fontSize: 16, color: "red" }}>❌ No hay tiendas disponibles</Text>
-              ) : (
-                <FlatList
-                  data={filteredTiendas}
-                  keyExtractor={(item, index) => index.toString()}
-                  renderItem={renderTienda}
-                  ListFooterComponent={renderFooter}
-                  onEndReached={loadTiendasYProductos}
-                  onEndReachedThreshold={0.2}
-                  contentContainerStyle={MarcasStyles.flatListContainer}
-                />
-              )
-            )}
-
-            <FooterNavigation />
-
-            {/* Modal de Producto */}
-            <Modal visible={modalVisible} transparent={true} animationType="fade">
-              <View style={ProductStyles.modalContainer}>
-                <View style={ProductStyles.modalContent}>
-                  <Pressable onPress={() => setModalVisible(false)} style={ProductStyles.closeButton}>
-                    <Ionicons name="close-circle" size={30} color="gray" />
-                  </Pressable>
-                  <Image source={{ uri: selectedProduct?.imagen_url }} style={ProductStyles.modalProductImage} />
-                  <Text style={ProductStyles.modalProductName}>{selectedProduct?.nombre_producto}</Text>
-                  <Text style={ProductStyles.modalProductPrice}>💲 {parseFloat(selectedProduct?.precio).toFixed(2)}</Text>
-                </View>
-              </View>
-            </Modal>
+        <View style={MarcasStyles.header}>
+          {selectedTienda ? (
+            <Pressable onPress={() => setSelectedTienda(null)}>
+              <Ionicons name="arrow-back-outline" size={24} color="#000000" />
+            </Pressable>
+          ) : (
+            <Pressable 
+              style={MarcasStyles.menuIcon}
+              onPress={() => navigation.toggleDrawer()}
+            >
+              <Ionicons name="menu-outline" size={24} color="#000000" />
+            </Pressable>
+          )}
+          <View style={{ flexDirection: 'row', gap: 15 }}>
+            <Pressable onPress={() => router.push("/Carrito/carrito")}>
+              <Ionicons name="cart-outline" size={24} color="#000000" />
+            </Pressable>
+            <Pressable onPress={() => router.push("/Herramientas/favoritos")}>
+              <Ionicons name="heart-outline" size={24} color="#000000" />
+            </Pressable>
+            <Pressable>
+              <Ionicons name="person-outline" size={24} color="#000000" />
+            </Pressable>
           </View>
-        </KeyboardAvoidingView>
+        </View>
+
+        <View style={MarcasStyles.searchContainer}>
+          <View style={MarcasStyles.searchInput}>
+            <Ionicons name="search-outline" size={20} color="#666666" style={{ marginRight: 8 }} />
+            <TextInput
+              placeholder={selectedTienda ? "Buscar productos" : "Buscar tiendas"}
+              placeholderTextColor="#666666"
+              style={{ flex: 1 }}
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+            />
+          </View>
+        </View>
+
+        <Text style={MarcasStyles.sectionTitle}>
+          {selectedTienda ? selectedTienda : "Tiendas Disponibles"}
+        </Text>
+
+        {selectedTienda && (
+          <View style={MarcasStyles.categoriesContainer}>
+            <CategoryNavigation 
+              onCategorySelect={setSelectedCategory} 
+              onSearchQueryChange={setSearchQuery} 
+            />
+          </View>
+        )}
+
+        <FlatList
+          data={selectedTienda ? filteredProductos : filteredTiendas}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={selectedTienda ? renderProducto : renderTienda}
+          numColumns={2}
+          contentContainerStyle={MarcasStyles.productGrid}
+          showsVerticalScrollIndicator={false}
+          ListFooterComponent={renderFooter}
+          onEndReached={loadTiendasYProductos}
+          onEndReachedThreshold={0.2}
+          ListEmptyComponent={() => (
+            <Text style={{ textAlign: 'center', marginTop: 20, color: '#666666' }}>
+              {selectedTienda ? "No hay productos disponibles" : "No hay tiendas disponibles"}
+            </Text>
+          )}
+        />
+
+        <View style={MarcasStyles.footerContainer}>
+          <FooterNavigation />
+        </View>
+
+        <Modal visible={modalVisible} transparent={true} animationType="fade">
+          <View style={ProductStyles.modalContainer}>
+            <View style={ProductStyles.modalContent}>
+              <Pressable onPress={() => setModalVisible(false)} style={ProductStyles.closeButton}>
+                <Ionicons name="close-circle" size={30} color="gray" />
+              </Pressable>
+              <Image source={{ uri: selectedProduct?.imagen_url }} style={ProductStyles.modalProductImage} />
+              <Text style={ProductStyles.modalProductName}>{selectedProduct?.nombre_producto}</Text>
+              <Text style={ProductStyles.modalProductPrice}>💲 {parseFloat(selectedProduct?.precio).toFixed(2)}</Text>
+            </View>
+          </View>
+        </Modal>
       </SafeAreaView>
     </View>
   );

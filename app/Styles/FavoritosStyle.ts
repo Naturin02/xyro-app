@@ -8,7 +8,6 @@ export const FavoritosStyles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 10,
-    backgroundColor: '#fff',
     backgroundColor: '#000',
     paddingTop: Platform.OS === 'ios' ? 50 : 20,
     paddingBottom: 10,
