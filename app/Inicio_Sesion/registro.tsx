@@ -3,6 +3,7 @@ import { View, Text, TextInput, Pressable, Image, Alert, TouchableOpacity, Activ
 import { useRouter } from "expo-router";
 import { registroStyles } from "../Styles/registroStyle";
 import { backend } from "@/context/endpoints"; // Importar la URL base del backend
+import api from "../../context/api"; // Importar la instancia de axios
 
 const RegistroScreen = () => {
   const router = useRouter();
@@ -30,7 +31,7 @@ const RegistroScreen = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`${backend}/api/usuarios/registro`, { // Usamos `backend` para la URL
+      const response = await api.post(`/usuarios/registro`, { // Usamos `backend` para la URL
         method: "POST",
         headers: {
           "Content-Type": "application/json",

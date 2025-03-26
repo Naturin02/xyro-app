@@ -1,7 +1,14 @@
 import { StyleSheet } from "react-native";
 import { Color, FontFamily, FontSize } from "../../constants/GlobalStyles"; // Asegúrate de que la ruta sea correcta
 
-export const CategoryNavigationStyles = StyleSheet.create({
+export const CategoryNavigationStyles = StyleSheet.create(
+  
+  
+  
+  
+  
+  
+  {
   container: {
     padding: 10, // Reducir el padding para hacer todo más compacto
     backgroundColor: Color.colorWhite,
@@ -46,6 +53,8 @@ export const CategoryNavigationStyles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+    flexDirection: "row", // Alineación en fila para icono y texto
+    alignItems: "center", // Centrado de los elementos
   },
   categoryButtonActive: {
     backgroundColor: Color.colorBlack,  // Fondo oscuro para categorías seleccionadas
@@ -55,9 +64,15 @@ export const CategoryNavigationStyles = StyleSheet.create({
     fontSize: FontSize.size_xs, // Texto más pequeño
     color: Color.colorBlack,
     fontFamily: FontFamily.juaRegular,
+    marginLeft: 5, // Agregar espacio entre el ícono y el texto
   },
   categoryButtonTextActive: {
     color: "#fff", // Blanco para las categorías seleccionadas
+  },
+  categoryIcon: {
+    width: 20,  // Ajuste el tamaño del icono
+    height: 20, // Ajuste el tamaño del icono
+    resizeMode: "contain", // Para que la imagen se ajuste sin distorsionarse
   },
   subCategoryButton: {
     backgroundColor: "#e0e0e0", // Fondo más claro para subcategorías

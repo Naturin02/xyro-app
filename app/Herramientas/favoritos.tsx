@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, FlatList, Pressable, Image, Platform, KeyboardAvoidingView } from "react-native";
+import { View, Text, FlatList, Pressable, Image, Platform, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from "expo-router";
 import { Ionicons } from '@expo/vector-icons';
@@ -37,8 +37,8 @@ const FavoritosScreen = () => {
   );
 
   return (
-    <View style={{ flex: 1 }}>
-      {/* Header fuera del SafeAreaView para mostrar la información del notch */}
+    <SafeAreaView style={{ flex: 1 }}>
+      {/* Header */}
       <View style={FavoritosStyles.header}>
         <Pressable onPress={() => router.back()} style={FavoritosStyles.backButton}>
           <Ionicons name="arrow-back" size={28} color="#fff" />
@@ -51,11 +51,13 @@ const FavoritosScreen = () => {
         </View>
       </View>
 
-      <SafeAreaView style={{ flex: 1 }}>
-        <KeyboardAvoidingView 
-          style={{ flex: 1 }} 
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-        >
+      {/* Contenido principal */}
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}  // Ajuste del comportamiento del teclado
+      >
+        {/* Agregar TouchableWithoutFeedback para cerrar el teclado al hacer clic fuera de los inputs */}
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={FavoritosStyles.container}>
             <FlatList
               data={favoritos}
@@ -64,9 +66,9 @@ const FavoritosScreen = () => {
               contentContainerStyle={FavoritosStyles.listContainer}
             />
           </View>
-        </KeyboardAvoidingView>
-      </SafeAreaView>
-    </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 

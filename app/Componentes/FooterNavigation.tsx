@@ -1,51 +1,107 @@
 import React, { useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, Text, View, Image } from "react-native";
 import { useRouter } from "expo-router"; // Para la navegación
 import { FooterNavigationStyle } from "../Styles/FooterNavigationStyle"; // Asegúrate de la ruta correcta
 
 const FooterNavigation = () => {
   const router = useRouter(); // Inicializa el hook de navegación
-  const [activeTab, setActiveTab] = useState("tienda"); // Estado para controlar el tab activo
+  const [activeTab, setActiveTab] = useState("marcas"); // Estado para controlar el tab activo
 
   return (
     <View style={FooterNavigationStyle.footer}>
+      {/* Tiendas */}
       <Pressable
-        style={[
-          FooterNavigationStyle.footerItem,
-          activeTab === "marcas" && FooterNavigationStyle.activeButton, // Si la sección es activa, aplica el estilo
-        ]}
+        style={FooterNavigationStyle.footerItem}
         onPress={() => {
-          setActiveTab("marcas"); // Cambiar solo el estado para hacer el botón activo
-          router.push("/Herramientas/marcas"); // Navegar a la ruta de Tienda
+          setActiveTab("marcas"); // Cambia el estado a 'marcas'
+          router.push("/Herramientas/marcas");
         }}
       >
-        <Text
-          style={[
-            FooterNavigationStyle.footerText,
-            activeTab === "marcas" && FooterNavigationStyle.activeText, // Si la sección es activa, cambia el color del texto
+        <Image
+          source={require("../../assets/images/tienda-alt.png")} // Ruta de la imagen de "Tiendas"
+          style={[ 
+            FooterNavigationStyle.footerIcon,
+            {
+              width: 20,
+              height: 20,
+              resizeMode: "contain",
+            },
           ]}
-        >
-          🏷️ Tienda
+        />
+        <Text style={FooterNavigationStyle.footerText}>
+          Tiendas
         </Text>
       </Pressable>
 
+      {/* Cuenta */}
       <Pressable
-        style={[
-          FooterNavigationStyle.footerItem,
-          activeTab === "cuenta" && FooterNavigationStyle.activeButton, // Si la sección es activa, aplica el estilo
-        ]}
+        style={FooterNavigationStyle.footerItem}
         onPress={() => {
-          setActiveTab("cuenta"); // Cambiar solo el estado para hacer el botón activo
-          router.push("/Herramientas/cuenta"); // Navegar a la ruta de Cuenta
+          setActiveTab("cuenta"); // Cambia el estado a 'cuenta'
+          router.push("/Herramientas/cuenta");
         }}
       >
-        <Text
-          style={[
-            FooterNavigationStyle.footerText,
-            activeTab === "cuenta" && FooterNavigationStyle.activeText, // Si la sección es activa, cambia el color del texto
+        <Image
+          source={require("../../assets/images/lapiz-de-usuario.png")} // Ruta de la imagen de "Cuenta"
+          style={[ 
+            FooterNavigationStyle.footerIcon,
+            {
+              width: 20,
+              height: 20,
+              resizeMode: "contain",
+            },
           ]}
-        >
-          👤 Cuenta
+        />
+        <Text style={FooterNavigationStyle.footerText}>
+          Cuenta
+        </Text>
+      </Pressable>
+
+      {/* Mis Pedidos */}
+      <Pressable
+        style={FooterNavigationStyle.footerItem}
+        onPress={() => {
+          setActiveTab("pedidos"); // Cambia el estado a 'pedidos'
+          router.push("/Herramientas/misPedidos");
+        }}
+      >
+        <Image
+          source={require("../../assets/images/caja.png")} // Ruta de la imagen de "Mis pedidos"
+          style={[ 
+            FooterNavigationStyle.footerIcon,
+            {
+              width: 20,
+              height: 20,
+              resizeMode: "contain",
+            },
+          ]}
+        />
+        <Text style={FooterNavigationStyle.footerText}>
+          Mis pedidos
+        </Text>
+      </Pressable>
+
+      {/* Favoritos */}
+      <Pressable
+        style={FooterNavigationStyle.footerItem}
+        onPress={() => {
+          setActiveTab("favoritos"); // Cambia el estado a 'favoritos'
+          router.push("/Herramientas/favoritos");
+        }}
+      >
+        <Image
+          source={require("../../assets/images/favorito.png")} // Ruta de la imagen de "Favoritos"
+          style={[ 
+            FooterNavigationStyle.footerIcon,
+            {
+              width: 20,
+              height: 20,
+              resizeMode: "contain",
+            },
+          ]}
+        />
+        <Text style={FooterNavigationStyle.footerText}>
+          Favoritos
         </Text>
       </Pressable>
     </View>

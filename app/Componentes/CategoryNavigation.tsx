@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { Pressable, Text, View, TextInput } from "react-native";
+import { 
+  Pressable, Text, View, TextInput, FlatList, Image 
+} from "react-native";
 import { CategoryNavigationStyles } from "../Styles/CategoryNavigationStyles"; // Asegúrate de que la ruta sea correcta
 
 interface CategoryNavigationProps {
@@ -48,6 +50,32 @@ const CategoryNavigation = ({
     onSearchQueryChange(query); // Llama a la función pasada como prop
   };
 
+  const renderCategory = ({ item }: { item: string }) => (
+    <Pressable
+      style={[
+        CategoryNavigationStyles.categoryButton,
+        selectedCategory === item && CategoryNavigationStyles.categoryButtonActive,
+      ]}
+      onPress={() => handleCategorySelect(item)}
+    >
+      {/* Para "Calzado", agregar la imagen */}
+      {item === "Calzado" ? (
+        <Image
+          source={require("../../assets/images/huellas-de-zapatos.png")} // Ruta de la imagen para Calzado
+          style={CategoryNavigationStyles.categoryIcon} // Asegúrate de agregar el estilo adecuado para el icono
+        />
+      ) : null}
+      <Text
+        style={[
+          CategoryNavigationStyles.categoryButtonText,
+          selectedCategory === item && CategoryNavigationStyles.categoryButtonTextActive,
+        ]}
+      >
+        {item}
+      </Text>
+    </Pressable>
+  );
+
   return (
     <View style={CategoryNavigationStyles.container}>
       {/* Buscador */}
@@ -60,28 +88,19 @@ const CategoryNavigation = ({
         />
       </View>
 
-      {/* Botones de filtro para categorías */}
-      <View style={CategoryNavigationStyles.categoriesContainer}>
-        {categories.map((category, index) => (
-          <Pressable
-            key={index}
-            style={[
-              CategoryNavigationStyles.categoryButton,
-              selectedCategory === category && CategoryNavigationStyles.categoryButtonActive,
-            ]}
-            onPress={() => handleCategorySelect(category)} // Llama a la función para seleccionar o desmarcar
-          >
-            <Text
-              style={[
-                CategoryNavigationStyles.categoryButtonText,
-                selectedCategory === category && CategoryNavigationStyles.categoryButtonTextActive,
-              ]}
-            >
-              {category}
-            </Text>
-          </Pressable>
-        ))}
-      </View>
+      {/* Carrusel de categorías */}
+      <FlatList
+        data={categories}
+        renderItem={renderCategory}
+        keyExtractor={(item) => item}
+        horizontal={true} // Esto permite el deslizamiento horizontal
+        showsHorizontalScrollIndicator={false} // Ocultar la barra de desplazamiento
+        contentContainerStyle={{
+          paddingHorizontal: 10,
+        }}
+        snapToAlignment="center" // Para que se alinee al centro al hacer el deslizamiento
+        decelerationRate="fast" // Hace el deslizamiento más rápido
+      />
 
       {/* Opciones de subcategorías basadas en la categoría seleccionada */}
       {selectedCategory && subCategories[selectedCategory] && (
